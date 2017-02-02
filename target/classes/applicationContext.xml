@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+      xmlns="http://www.springframework.org/schema/beans"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:context="http://www.springframework.org/schema/context"
+      xmlns:aop="http://www.springframework.org/schema/aop"
+      xmlns:tx="http://www.springframework.org/schema/tx"
+	  xmlns:mvc="http://www.springframework.org/schema/mvc"
+
+      xsi:schemaLocation="
+	
+	  http://www.springframework.org/schema/beans
+	  http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	  
+	  http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context-3.0.xsd
+ 	  
+	  http://www.springframework.org/schema/aop 
+	  http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+	  
+	  http://www.springframework.org/schema/tx
+      http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+    
+      http://www.springframework.org/schema/mvc
+      http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+        
+      ">
+      <!-- 配置C3P0连接池，管理数据库的连接 -->
+      <bean id="comboPooledDataSourceID" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+      	<property name="driverClass" value="com.mysql.jdbc.Driver"></property>
+      	<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/meidiandian"></property>
+      	<property name="user" value="root"></property>
+      	<property name="password" value="123456"></property>
+      </bean>
+      
+      <!-- 配置SqlSessionFactoryBean,加载mybatis.xml,替代mybatis工具类的作用 -->
+      <bean id="sqlSessionFactoryBeanID" class="org.mybatis.spring.SqlSessionFactoryBean">
+      	<property name="dataSource" ref="comboPooledDataSourceID"></property>
+      	<property name="configLocation" value="classpath:mybatis.xml"></property>
+      	<property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+      </bean>
+      
+      <!-- 配置mybatis事物管理器 -->
+      <bean id="dataSourceTransactionManagerID" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+      		<property name="dataSource" ref="comboPooledDataSourceID"/>
+      </bean>
+      
+      <!-- 配置事务通知，即哪些方法需要事务支持 -->
+      <tx:advice id="tx" transaction-manager="dataSourceTransactionManagerID">
+      		<tx:attributes>
+      			<tx:method name="*" propagation="REQUIRED"/>
+      		</tx:attributes>
+      </tx:advice>
+      
+      <!-- 配置事务切面，即让哪些包下面的的类需要事务 -->
+      <aop:config>
+      	<aop:pointcut id="pointcut" expression="execution(* com.meidiandian.service.*.*(..))"/>
+      	<aop:advisor advice-ref="tx" pointcut-ref="pointcut"/>
+      </aop:config>
+      
+      <bean id="userServiceID" class="com.meidiandian.service.impl.UserService">
+      	<property name="sqlSessionFactory" ref="sqlSessionFactoryBeanID"></property>
+      </bean>
+	  
+</beans>

@@ -1,0 +1,97 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com</groupId>
+  <artifactId>meidiandian</artifactId>
+  <packaging>jar</packaging>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>meidiandian Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    	<!--spring核心依赖-->
+        <dependency>  
+            <groupId>org.springframework</groupId>  
+            <artifactId>spring-core</artifactId>  
+            <version>4.1.7.RELEASE</version>  
+        </dependency>  
+        <!--spring ioc依赖 -->  
+        <dependency>  
+            <groupId>org.springframework</groupId>  
+            <artifactId>spring-beans</artifactId>  
+            <version>4.1.7.RELEASE</version>  
+        </dependency>  
+        <!--spring 扩展依赖 -->  
+        <dependency>  
+            <groupId>org.springframework</groupId>  
+            <artifactId>spring-context</artifactId>  
+            <version>4.1.7.RELEASE</version>  
+        </dependency>  
+        <!--spring dao层依赖-->  
+        <dependency>
+            <groupId>org.springframework</groupId>  
+            <artifactId>spring-jdbc</artifactId>  
+            <version>4.1.7.RELEASE</version>  
+        </dependency>  
+        <dependency>  
+            <groupId>org.springframework</groupId>  
+            <artifactId>spring-tx</artifactId>
+            <version>4.1.7.RELEASE</version>  
+        </dependency>  
+        <!--spring web相关依赖 -->
+        <dependency>  
+            <groupId>org.springframework</groupId>  
+            <artifactId>spring-web</artifactId>  
+            <version>4.1.7.RELEASE</version>  
+        </dependency>  
+        <dependency>  
+            <groupId>org.springframework</groupId>  
+            <artifactId>spring-webmvc</artifactId>  
+            <version>4.1.7.RELEASE</version>  
+        </dependency>
+        <!-- mybatis相关依赖 -->
+        <dependency>
+		  	<groupId>org.mybatis</groupId>
+		  	<artifactId>mybatis</artifactId>
+		  	<version>3.4.2</version>
+		</dependency>
+        <dependency>
+        	<groupId>org.mybatis</groupId>
+  			<artifactId>mybatis-spring</artifactId>
+  			<version>1.3.1</version>
+        </dependency>
+        <!-- c3p0连接池 -->
+        <dependency>
+  			<groupId>c3p0</groupId>
+ 			<artifactId>c3p0</artifactId>
+  			<version>0.9.1.2</version>
+		</dependency>
+		
+		<dependency>
+  			<groupId>org.aspectj</groupId>
+  			<artifactId>aspectjweaver</artifactId>
+  			<version>1.8.10</version>
+		</dependency>
+		
+		<dependency>
+    		<groupId>log4j</groupId>
+    		<artifactId>log4j</artifactId>
+    		<version>1.2.17</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>org.wisdom-framework</groupId>
+		  <artifactId>mysql-connector-java</artifactId>
+		  <version>5.1.34_1</version>
+		</dependency>
+		
+  </dependencies>
+  <build>
+    <finalName>meidiandian</finalName>
+  </build>
+</project>
