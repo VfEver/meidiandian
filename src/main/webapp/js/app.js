@@ -1,7 +1,7 @@
 /**
  * meidiandian app router page
  */
-angular.module("meidiandian",['ui.router'])
+angular.module("meidiandian", ['ui.router', 'controllers'])
 .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
 	$urlRouterProvider.otherwise('/index');
 	$stateProvider

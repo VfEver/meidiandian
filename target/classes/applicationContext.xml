@@ -58,8 +58,12 @@
       	<aop:advisor advice-ref="tx" pointcut-ref="pointcut"/>
       </aop:config>
       
-      <bean id="userServiceID" class="com.meidiandian.service.impl.UserService">
+      <bean id="userDaoID" class="com.meidiandian.dao.impl.UserDao">
       	<property name="sqlSessionFactory" ref="sqlSessionFactoryBeanID"></property>
+      </bean>
+      
+      <bean id="userServiceID" class="com.meidiandian.service.impl.UserService">
+      	<property name="userDao" ref="userDaoID"></property>
       </bean>
 	  
 </beans>

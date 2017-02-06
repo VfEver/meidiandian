@@ -3,8 +3,12 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
+	<icon>
+		<small-icon>/images/logo.png</small-icon>
+		<large-icon>/images/logo.jpg</large-icon>
+	</icon>
 	<display-name>meidiandian</display-name>
-  
+		
   	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:applicationContext.xml</param-value>
@@ -14,12 +18,47 @@
 		<param-value>classpath:log4j.properties</param-value>
 	</context-param>
   	
+  	<!-- 登录过滤器 -->
+  	<filter>
+  		<filter-name>loginFilter</filter-name>
+  		<filter-class>com.meidiandian.filter.LoginFilter</filter-class>
+  		<init-param>
+  			<param-name>ignores</param-name>
+  			<param-value>/meidiandian/frame/, /meidiandian/css/, /meidiandian/js/, /meidiandian/tpls/, /meidiandian/images</param-value>
+  		</init-param>
+  	</filter>
+  	
+  	<!-- 编码过滤器 -->
+  	<filter>
+    <filter-name>encoding</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+        <param-name>encoding</param-name><!--用来指定一个具体的字符集-->
+        <param-value>UTF-8</param-value>
+    </init-param>
+    <init-param>
+        <param-name>forceEncoding</param-name><!--true：无论request是否指定了字符集，都是用encoding；false：如果request已指定一个字符集，则不使用encoding-->
+        <param-value>false</param-value>
+    </init-param>
+	</filter>
+  	
+  	<filter-mapping>
+  		<filter-name>loginFilter</filter-name>
+  		<url-pattern>/*</url-pattern>
+  	</filter-mapping>
+  	
+	<filter-mapping>
+	    <filter-name>encoding</filter-name>
+	    <url-pattern>/*</url-pattern>
+	</filter-mapping>
+  	
   	<listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
   	
+  	
 	<servlet>
-      <servlet-name>dispatcher</servlet-name>  
+      <servlet-name>dispatcher</servlet-name>
       <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>  
       <init-param>  
           <param-name>contextConfigLocation</param-name>  
@@ -29,6 +68,6 @@
   	</servlet>
 	<servlet-mapping>
 		<servlet-name>dispatcher</servlet-name>  
-		<url-pattern>/mvc/</url-pattern>  
+		<url-pattern>*.do</url-pattern>  
 	</servlet-mapping>
 </web-app>

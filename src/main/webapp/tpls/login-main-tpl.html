@@ -1,21 +1,21 @@
-<div class="loginMain">
+<div class="loginMain" ng-controller="loginController">
 	<div class="operationImage">
 		<img alt="image of cake" src="images/berry.png" />
 	</div>
 	<div class="operationInput">
 		<form>
 			<div class="form-group has-feedback">  
-                 <span class="glyphicon glyphicon-user"></span>  
+                 <span class="glyphicon glyphicon-user"></span>
                  <label for="username" style="color: gray;">用户名</label>  
                  <br/>
-                 <input type="text" class="form-control" id="username" name="username" placeholder="用户名" autofocus>  
+                 <input ng-model="username" type="text" class="form-control" id="username" name="username" placeholder="用户名" autofocus>  
           	</div>
           	<br/>
             <div class="form-group has-feedback">
                 <span class="glyphicon glyphicon-lock"></span>
                 <label for="password" style="color: gray;">密　码</label>  
                 <br/>
-                <input type="password" class="form-control" id="password" name="password" placeholder="密码">  
+                <input ng-model="password" type="password" class="form-control" id="password" name="password" placeholder="密   码">  
             </div>  
 		</form>
 		<div>
@@ -23,9 +23,9 @@
 		</div>
 		<br/>
 		<div>
-			<button type="button" class="btn btn-default btn-lg">登录</button>
+			<button type="button" class="btn btn-default btn-lg" ng-click="login()">登录</button>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<button type="button" class="btn btn-default btn-lg">注册</button>
+			<button type="button" class="btn btn-default btn-lg" ng-click="login()">注册</button>
 		</div>
 		<br/>
 		<div>
