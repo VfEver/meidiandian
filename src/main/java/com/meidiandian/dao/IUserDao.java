@@ -8,5 +8,16 @@ import com.meidiandian.entity.User;
  *
  */
 public interface IUserDao {
-	public User findUser(String username, String password);
+	/**
+	 * login
+	 * @param username
+	 * @param password
+	 * @return
+	 */
+	public User findUser(String account, String password);
+	/**
+	 * user register and save user
+	 * @param user
+	 */
+	public void saveUser(User user);
 }

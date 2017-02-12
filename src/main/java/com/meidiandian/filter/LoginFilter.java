@@ -32,12 +32,11 @@ public class LoginFilter implements Filter{
 		
 		String username = (String)session.getAttribute("username");
 		String url = request.getRequestURI();
-		if (url.contains("login") || !url.contains(".do")) {
+		if (url.contains("login") || !url.contains(".do") || url.contains("register")) {
 			chain.doFilter(request, response);
 			return ;
 		}
 		if (StringUtils.isEmpty(username)) {
-			System.out.println(request.getContextPath()+"/#login");
 			response.sendRedirect(request.getContextPath()+"/#login");
 		} else {
 			chain.doFilter(request, response);

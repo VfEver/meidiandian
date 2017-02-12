@@ -1,0 +1,66 @@
+<div class="loginMain" ng-controller="registerController">
+	<div class="operationImage">
+		<img alt="image of cake" src="images/berry.png" />
+	</div>
+	<div class="operationInput">
+		<form name="registerForm">
+			<div class="form-group has-feedback">  
+                 <span class="glyphicon glyphicon-user"></span>
+                 <label for="account" style="color: gray;">账号</label>  
+                 <input ng-model="account"  
+                 	ng-minlength="6"
+                 	ng-maxlength="20"
+                 	maxlength="20" 
+                 	type="text" 
+                 	class="form-control" 
+                 	name="account" 
+                 	placeholder="账号" 
+                 	autofocus />  
+          	</div>
+            <div class="form-group has-feedback">
+                <span class="glyphicon glyphicon-lock"></span>
+                <label for="password" style="color: gray;">密码</label>  
+                <br/>
+                <input ng-model="password" 
+                	ng-minlength="6"
+                 	ng-maxlength="20"
+                	maxlength="20" 
+                	type="password" 
+                	class="form-control" 
+                	name="password" 
+                	placeholder="密   码" />  
+            </div>
+            
+            <div class="form-group has-feedback">
+                <span class="glyphicon glyphicon-lock"></span>
+                <label for="password" style="color: gray;">确认密码</label>  
+                <br/>
+                <input ng-model="comfirmPassword" 
+                	maxlength="20" 
+                	type="password"
+                	class="form-control" 
+                	name="confirmPassword" 
+                	placeholder="密   码" />  
+            </div>
+            <div>
+				<input type="checkbox" value="seller" ng-model="isSeller"/><span style="font-size:15px;color:#999">商家注册</span>
+			</div>
+		</form>
+		<div>
+			<p style="font-size:15px;color:red" 
+			ng-if="registerForm.account.$error.minlength && registerForm.account.$touched">
+			账号长度在6~20之间</p>
+			<p style="font-size:15px;color:red"
+			ng-if="registerForm.password.$error.minlength && registerForm.password.$touched">密码长度在6~20之间</p>
+		</div>
+		<br/>
+		<div>
+			<button type="button" class="btn btn-default btn-lg" ng-click="register()">注册</button>
+		</div>
+		<br/>
+		<div>
+			<p style="font-size:15px;color:#999">提示： 注册登录美点点网站信息请妥善管理</p>
+		</div>
+		
+	</div>
+</div>

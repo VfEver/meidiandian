@@ -1,6 +1,9 @@
 <div class="navheader">
 	<div class="logo"><a href="#index"><img alt="logo" src="images/logo.png"></a></div>
 </div>
-<div class="operateLabel">
-	<a href="#login">登录</a>|<a href="#login">注册</a>
+<div class="operateLabel" ng-controller="loginController">
+	<div ng-controller="registerController">
+		<div ng-show="!login"><a href="#login">登录</a>|<a href="#register">注册</a></div>
+		<div ng-show="login"><a>{{username}}</a></div>
+	</div>
 </div>

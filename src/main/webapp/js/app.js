@@ -32,5 +32,33 @@ angular.module("meidiandian", ['ui.router', 'controllers'])
 				templateUrl: 'tpls/index-footer-tpl.html'
 			}
 		}
+	})
+	.state('register', {
+		url: '/register',
+		views: {
+			'navinfo': {
+				templateUrl: 'tpls/login-nav-tpl.html'
+			},
+			'main': {
+				templateUrl: 'tpls/register-main-tpl.html'
+			},
+			'footer': {
+				templateUrl: 'tpls/index-footer-tpl.html'
+			}
+		}
+	})
+	.state('goods', {
+		url: '/goods',
+		views: {
+			'navinfo': {
+				templateUrl: ''
+			},
+			'main': {
+				templateUrl: 'tpls/goods-main-tpl.html'
+			},
+			'footer': {
+				templateUrl: 'tpls/index-footer-tpl.html'
+			}
+		}
 	});
 }]);

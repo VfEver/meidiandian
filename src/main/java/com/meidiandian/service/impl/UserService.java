@@ -11,8 +11,13 @@ public class UserService implements IUserService{
 		this.userDao = userDao;
 	}
 	@Override
-	public User findUser(String username, String password) {
-		return userDao.findUser(username, password);
+	public User findUser(String account, String password) {
+		return userDao.findUser(account, password);
+	}
+	@Override
+	public void saveUser(User user) {
+
+		userDao.saveUser(user);
 	}
 	
 }

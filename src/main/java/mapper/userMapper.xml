@@ -3,12 +3,23 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.meidiandian.entity.User">
 	<resultMap type="user" id="userMap">
-		<result property="id" column="id" />
-		<result property="password" column="password"/>
+		<id property="id" column="user_id"/>
+		<result property="account" column="user_account"/>
+		<result property="password" column="user_password"/>
+		<result property="name" column="user_name"/>
+		<result property="address" column="user_address"/>
+		<result property="type" column="user_type"/>		
+		<result property="createTime" column="createTime"/>
 	</resultMap>
+	<!-- 保存用户 -->
+	<insert id="saveUser" parameterType="user">
+		insert into user(user_account, user_password, user_name, user_address, user_type, createTime)
+		values (#{account}, #{password}, #{account}, #{address}, #{type}, #{createTime});
+	</insert>
+	<!-- 根据账号和密码查找用户 -->
 	<select id="findUser" parameterType="map" resultMap="userMap">
-		select * 
-		from user
-		where id=#{id} and password = #{password}
+		select * from user
+		where user_account = #{account} and user_password = #{password};
 	</select>
+	
 </mapper>

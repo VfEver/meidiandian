@@ -16,15 +16,23 @@ public class UserDao implements IUserDao {
 		this.sqlSessionFactory = sqlSessionFactory;
 	}
 	@Override
-	public User findUser(String username, String password) {
+	public User findUser(String account, String password) {
 		SqlSession sqlSession = sqlSessionFactory.openSession();
 		Map<String, String> map = new HashMap<>();
-		map.put("id", username);
+		map.put("account", account);
 		map.put("password", password);
 		User user = sqlSession.selectOne(User.class.getName() + ".findUser", map);
 		if (user != null) {
 			return user;
 		}
 		return null;
+	}
+	@Override
+	public void saveUser(User user) {
+
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		sqlSession.insert(User.class.getName() + ".saveUser", user);
+		sqlSession.commit();
+		sqlSession.close();
 	}
 }

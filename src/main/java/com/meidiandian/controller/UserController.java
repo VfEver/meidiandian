@@ -1,5 +1,7 @@
 package com.meidiandian.controller;
 
+import java.util.Date;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,38 +27,99 @@ public class UserController {
 	@Autowired
 	private IUserService userService;
 	
-	@RequestMapping(value="/login", method=RequestMethod.POST)
+	/**
+	 * user login
+	 * @param account
+	 * @param password
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value="/login", method=RequestMethod.POST, produces="text/html;charset=UTF-8")
 	@ResponseBody
 	public String login(
-			@RequestParam(value = "username", defaultValue = "") String username,
+			@RequestParam(value = "account", defaultValue = "") String account,
 			@RequestParam(value = "password", defaultValue = "") String password,
+			@RequestParam(value = "remMe", defaultValue = "0") String remMe,
 			HttpServletRequest request, HttpServletResponse response) {
 		
-		HttpSession session = request.getSession();
+		JSONObject json = new JSONObject();
 		
-		if (!StringUtils.isEmpty(username) && !StringUtils.isEmpty(password)) {
+		if (!StringUtils.isEmpty(account) && !StringUtils.isEmpty(password)) {
+			
+			User user = userService.findUser(account, password);
+			if (user != null) {
+				HttpSession session = request.getSession();
+				session.setAttribute("username", account);
+				
+				if (remMe.equals("1")) {
+					
+					Cookie cookie = new Cookie("username", account);
+					cookie.setMaxAge(24*60*7);
+					response.addCookie(cookie);
+				}
+				
+				json.put("status", 200);
+				json.put("username", user.getName());
+				
+			} else {
+				json.put("status", -1);
+				json.put("reason", "账号或者密码错误，请重试！");
+			}
 
-			session.setAttribute("username", username);
-			
-			Cookie cookie = new Cookie("username", username);
-			cookie.setMaxAge(2*60);
-			response.addCookie(cookie);
-			
-			User user = new User();
-			user.setId(username);
-			user.setPasswrod(password);
-			
-			JSONObject json = new JSONObject();
-			json.put("status", "200");
-			json.put("username", username);
-			
-			return json.toString();
 		} else {
-			JSONObject json = new JSONObject();
-			json.put("status", "500");
-			return json.toString();
+
+			json.put("status", -1);
 		}
 		
+		return json.toString();
+	}
+	
+	/**
+	 * user register
+	 * @param account
+	 * @param password
+	 * @param type
+	 * @return
+	 */
+	@RequestMapping(value="/register", method=RequestMethod.POST)
+	@ResponseBody
+	public String register(
+			@RequestParam(value = "account", defaultValue = "") String account,
+			@RequestParam(value = "password", defaultValue = "") String password,
+			@RequestParam(value = "type", defaultValue = "0") String type,
+			HttpServletRequest request, HttpServletResponse response) {
+
+		JSONObject json = new JSONObject();
+		if (!StringUtils.isEmpty(account) && !StringUtils.isEmpty(password)) {
+			
+			User user =  new User();
+			user.setAccount(account);
+			user.setPassword(password);
+			user.setName(account);
+			Date date = new Date();
+			user.setCreateTime(date);
+			user.setType(Integer.parseInt(type));
+			user.setAddress("陕西省西安市长安区西沣路西安电子科技大学");
+			
+			userService.saveUser(user);
+			
+			json.put("username", account);
+			json.put("status", 200);
+			
+			HttpSession session = request.getSession();
+			session.setAttribute("username", account);
+			
+			Cookie cookie = new Cookie("username", account);
+			cookie.setMaxAge(30*60);
+			response.addCookie(cookie);
+			
+		} else {
+			json.put("status", -1);
+			json.put("reason", "account or the password can not be null");
+		}
+		
+		return json.toString();
 	}
 	
 }

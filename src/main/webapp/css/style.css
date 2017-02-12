@@ -5,8 +5,12 @@
 	margin: 0;
 	padding: 0;
 }
-body {
+html, body {
 	font: 12px/1.125 Microsoft Yahei,Arial,Helvetica,sans-serif;
+	height: 100%;
+}
+div {
+	display: block;
 }
 .navheader {
 	height: 68px;
@@ -83,4 +87,57 @@ body {
 	opacity: 0.8;
 	margin-top:50px;
 }
-
+/*
+	商家界面goods-main-tpl 
+*/
+.page-wrap {
+	background-color: #F5F5F5;
+	min-height:500px;
+	display: block;
+	margin-bottom:30px;
+}
+.inner-wrap {
+	background-color: white;
+	width:980px;
+	margin: 0 auto;
+	height: 100%;
+	position: relative;
+}
+.rest-banner {
+	width: 960px;
+	margin: 0 auto;
+}
+.title-wrap {
+    padding: 18px 0 18px 0;
+    margin: 0 10px;
+    position: relative;
+    overflow: hidden;
+}
+.sort-list {
+	position: absolute;
+    left: 0;
+    top: 26px;
+    padding-left: 32px;
+    font-size: 16px;
+}
+.title-content {
+	width:822px;
+	padding-left: 140px;
+	zoom: 1;
+}
+.fl {
+	float: left;
+	margin: 8px 20px 8px 0;
+	display: list-item;
+    text-align: -webkit-match-parent;
+    font-size: 14px;
+    list-style-type: none;
+}
+.fl a:link {
+	text-decoration: none;
+	color: gray;
+}
+.fl a:hover {
+	text-decoration: none;
+	color: gold;
+}

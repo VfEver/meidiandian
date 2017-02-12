@@ -6,26 +6,35 @@
 		<form>
 			<div class="form-group has-feedback">  
                  <span class="glyphicon glyphicon-user"></span>
-                 <label for="username" style="color: gray;">用户名</label>  
+                 <label for="account" style="color: gray;">账号</label>  
                  <br/>
-                 <input ng-model="username" type="text" class="form-control" id="username" name="username" placeholder="用户名" autofocus>  
+                 <input ng-model="account" 
+                 	type="text" 
+                 	class="form-control" 
+                 	name="account" 
+                 	placeholder="用户名" autofocus>  
           	</div>
           	<br/>
             <div class="form-group has-feedback">
                 <span class="glyphicon glyphicon-lock"></span>
-                <label for="password" style="color: gray;">密　码</label>  
+                <label for="password" style="color: gray;">密码</label>  
                 <br/>
-                <input ng-model="password" type="password" class="form-control" id="password" name="password" placeholder="密   码">  
-            </div>  
+                <input ng-model="password" 
+                	type="password" 
+                	class="form-control" 
+                	id="password" 
+                	name="password" 
+                	placeholder="密   码">  
+            </div> 
+            <br/>
 		</form>
 		<div>
-			<input type="checkbox" value="loginwithoutpassword"/><span style="font-size:15px;color:#999">七天内免登陆</span>
-		</div>
+			<input type="checkbox" value="loginwithoutpassword" ng-model="remMe"/><span style="font-size:15px;color:#999">七天内免登陆</span></div>
 		<br/>
 		<div>
 			<button type="button" class="btn btn-default btn-lg" ng-click="login()">登录</button>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<button type="button" class="btn btn-default btn-lg" ng-click="login()">注册</button>
+			<button type="button" class="btn btn-default btn-lg" ng-click="jumpToRegister()">注册</button>
 		</div>
 		<br/>
 		<div>
