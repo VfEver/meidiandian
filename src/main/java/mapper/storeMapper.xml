@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+	<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.meidiandian.entity.Store">
+	<resultMap type="store" id="storeMap">
+		<id property="id" column="store_id"/>
+		<result property="userID" column="user_id"/>
+		<result property="storeName" column="store_name"/>
+		<result property="storeHours" column="store_hours"/>
+		<result property="storeAddress" column="store_address"/>
+		<result property="cost" column="cost"/>		
+	</resultMap>
+	<!-- 根据用户的id找出他所开的店铺 -->
+	<select id="selectStoreByUserID" parameterType="int" resultMap="storeMap">
+		select * from store
+		where user_id=#{id}
+	</select>
+	<insert id="saveStore" parameterType="store">
+		insert into store(user_id, store_name, store_hours, store_address, cost) 
+		values (#{userID}, #{storeName}, #{storeHours}, #{storeAddress}, #{cost});
+	</insert>
+</mapper>

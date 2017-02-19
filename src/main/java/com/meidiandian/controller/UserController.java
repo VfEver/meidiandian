@@ -1,6 +1,8 @@
 package com.meidiandian.controller;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.meidiandian.entity.User;
 import com.meidiandian.service.IUserService;
+import com.meidiandian.util.DateUtils;
 import com.meidiandian.util.StringUtils;
 
 @Controller
@@ -50,7 +53,7 @@ public class UserController {
 			User user = userService.findUser(account, password);
 			if (user != null) {
 				HttpSession session = request.getSession();
-				session.setAttribute("username", account);
+				session.setAttribute("id", user.getId());
 				
 				if (remMe.equals("1")) {
 					
@@ -61,6 +64,7 @@ public class UserController {
 				
 				json.put("status", 200);
 				json.put("username", user.getName());
+				json.put("id", user.getId());
 				
 			} else {
 				json.put("status", -1);
@@ -107,8 +111,11 @@ public class UserController {
 			json.put("username", account);
 			json.put("status", 200);
 			
+			int curID = userService.findMaxID();
+			json.put("id", curID);
+			
 			HttpSession session = request.getSession();
-			session.setAttribute("username", account);
+			session.setAttribute("id", curID);
 			
 			Cookie cookie = new Cookie("username", account);
 			cookie.setMaxAge(30*60);
@@ -122,4 +129,100 @@ public class UserController {
 		return json.toString();
 	}
 	
+	/**
+	 * 用户退出
+	 * @param id
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value="/logout", method=RequestMethod.POST, produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String logout(@RequestParam(value = "id", defaultValue = "") String id,
+			HttpServletRequest request, HttpServletResponse response) {
+		
+		JSONObject json = new JSONObject();
+		
+		if (!StringUtils.isEmpty(id)) {
+			HttpSession session = request.getSession();
+			session.removeAttribute("id");
+			json.put("status", 200);
+		} else {
+			json.put("status", -1);
+			json.put("reason", "出现问题，请稍等...");
+		}
+		
+		return json.toString();
+	}
+	
+	/**
+	 * 查询用户信息
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value="/userinfo", method=RequestMethod.GET, produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String getUserInfo(@RequestParam(value = "id", defaultValue = "") String id) {
+		
+		JSONObject json = new JSONObject();
+		
+		if (!StringUtils.isEmpty(id)) {
+			
+			int userID = Integer.parseInt(id);
+			User user = userService.findUserByID(userID);
+			json.put("account", user.getAccount());
+			json.put("username", user.getName());
+			json.put("createTime", DateUtils.format(user.getCreateTime(), "yyyy-MM-dd HH:MM:SS"));
+			json.put("address", user.getAddress());
+			json.put("type", user.getType());
+			json.put("password", user.getPassword());
+			json.put("status", 200);
+		} else {
+			
+			json.put("status", -1);
+			json.put("reason", "出现问题，请重试");
+		}
+ 		
+		return json.toString();
+	}
+	
+	/**
+	 * 更新用户信息
+	 * @param id
+	 * @param account
+	 * @param username
+	 * @param address
+	 * @param password
+	 * @return
+	 */
+	@RequestMapping(value="/updateuserinfo.do", method=RequestMethod.POST, produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String updateUserInfo(@RequestParam(value = "id", defaultValue = "") String id,
+			@RequestParam(value = "account", defaultValue = "") String account,
+			@RequestParam(value = "username", defaultValue = "") String username,
+			@RequestParam(value = "address", defaultValue = "") String address,
+			@RequestParam(value = "password", defaultValue = "") String password) {
+		
+		JSONObject json = new JSONObject();
+		
+		if (!StringUtils.isEmpty(id)) {
+			
+			Map<String, String> map = new HashMap<>();
+			map.put("id", id);
+			map.put("account", account);
+			map.put("username", username);
+			map.put("address", address);
+			map.put("password", password);
+			userService.updateUserInfo(map);
+			
+			json.put("status", 200);
+		} else {
+			
+			json.put("status", -1);
+			json.put("reason", "更新失败，请稍后重试");
+			
+		}
+		
+		return json.toString();
+	}
 }

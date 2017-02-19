@@ -1,0 +1,111 @@
+<div class="page-slice"></div>
+<div class="setting-wrap" ng-controller="settingsController">
+	<div class="inner-wrap">
+		<div class="left-side">
+			<ul class="nav nav-pills nav-stacked">
+			  <li class="active" ng-click="changeToUserInfo()" id="userInfoID"><a href=""><h4>我的主页</h4></a></li>
+			  <li ng-show="type == 0" ng-click="changeToUserOrder()" id="userOrderID"><a href=""><h4>我的订单</h4></a></li>
+			  <li ng-show="type == 0" ng-click="changeToUserComment()" id="usercommentID"><a href=""><h4>我的评价</h4></a></li>
+			  <li ng-show="type == 1" ng-click="changeToStoreInfo()" id="stroeInfoID"><a href=""><h4>店铺管理</h4></a></li>
+			</ul>
+		</div>
+		<div class="right-side">
+		
+			<div class="userInfoDiv" ng-show="userInfoDiv">
+				<div>
+					<h3>个人信息</h3>
+					<hr/>
+				</div>
+				<div>
+				<table>
+					<tr>
+						<td><p>账号：</td><td>{{account}}</p></td>
+					</tr>
+					<tr>
+						<td><p>用户名：</td><td>{{username}}</p></td>
+						<td><input ng-model="newUsername" type="text" class="form-control" placeholder="输入修改用户名"/></td>
+					</tr>
+					<tr>
+						<td><p>密码：</td><td>{{password}}</p></td>
+						<td><input ng-model="newPassword" type="text" class="form-control" placeholder="输入修改密码"/></td>
+					</tr>
+					<tr>
+						<td><p>最近收货地址：</td><td>{{address}}</p></td>
+						<td><input ng-model="newAddress" type="text" class="form-control" placeholder="输入修改收货地址"/></td>
+					</tr>
+					<tr>
+						<td><p>创建时间：</td><td>{{createTime}}</p></td>
+					</tr>
+					
+				</table>
+				</div>
+				<button ng-click="updateUserInfo()" class="btn btn-default">更新信息</button> 
+			</div>
+			
+			<div class="storeInfoDiv" ng-show="storeInfoDiv">
+				<div ng-show="createButton" style="margin:20px 0px 0px 10px">
+					<p>您还没有店铺，是否新建店铺？</p>
+					<button ng-click="createStore()" class="btn btn-success">新建店铺</button>
+				</div>
+				<div ng-show="newStore" class="new-store">
+					<div>
+						<h3>创建店铺</h3>
+						<hr/>
+					</div>
+					<div>
+					<table>
+						<tr>
+							<td><p>店铺名称：</td><td><input ng-model="storeName" type="text" class="form-control" placeholder="例如：国记豆腐脑"/></p></td>
+						</tr>
+						<tr>
+							<td><p>店铺地址：</td><td><input ng-model="storeAddress" type="text" class="form-control" placeholder="例如：陕西省西安市长安区西沣路西安电子科技大学"/></p></td>
+						</tr>
+						<tr>
+							<td><p>营业时间：</td><td><input ng-model="storeHours" type="text" class="form-control" placeholder="格式：0-24"/></p></td>
+						</tr>
+						<tr>
+							<td><p>起送金额：</td><td><input ng-model="cost" type="text" class="form-control" placeholder="例如：3"/></p></td>
+						</tr>
+						<tr>
+							<td><button class="btn btn-default" ng-click="saveStore()">创建店铺</button></td>
+						</tr>
+					</table>
+					</div>
+				</div>
+			</div>
+			
+			<div class="storeInfo" ng-show="storeInfo">
+				<div class="store-info">
+					<div>
+						<h3>店铺信息</h3>
+						<hr/>
+					</div>
+					<div>
+					<table>
+						<tr>
+							<td><p>店铺名称：</td><td>{{storeName}}</p></td>
+							<td><input ng-model="storeName" type="text" class="form-control" placeholder="例如：国记豆腐脑"/></td>
+						</tr>
+						<tr>
+							<td><p>店铺地址：</td><td>{{storeAddress}}</p></td>
+							<td><input ng-model="storeAddress" type="text" class="form-control" placeholder="例如：陕西省西安市长安区西沣路西安电子科技大学"/></td>
+						</tr>
+						<tr>
+							<td><p>营业时间：</td><td>{{storeHours}}</p></td>
+							<td><input ng-model="storeHours" type="text" class="form-control" placeholder="格式：0-24"/></td>
+						</tr>
+						<tr>
+							<td><p>起送金额：</td><td>{{cost}}</p></td>
+							<td><input ng-model="cost" type="text" class="form-control" placeholder="例如：3"/></td>
+						</tr>
+						<tr>
+							<td><button class="btn btn-default" ng-click="updateStore()">更新店铺</button></td>
+						</tr>
+					</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="page-slice"></div>

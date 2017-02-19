@@ -30,13 +30,17 @@ public class LoginFilter implements Filter{
 		
 		HttpSession session = request.getSession(true);
 		
-		String username = (String)session.getAttribute("username");
+		String id = String.valueOf(session.getAttribute("id"));
 		String url = request.getRequestURI();
-		if (url.contains("login") || !url.contains(".do") || url.contains("register")) {
+		//忽略登录注册退出
+		if (url.contains("login") || 
+				!url.contains(".do") || 
+				url.contains("register") || 
+				url.contains("logout")) {
 			chain.doFilter(request, response);
 			return ;
 		}
-		if (StringUtils.isEmpty(username)) {
+		if (StringUtils.isEmpty(id)) {
 			response.sendRedirect(request.getContextPath()+"/#login");
 		} else {
 			chain.doFilter(request, response);

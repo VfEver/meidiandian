@@ -15,7 +15,7 @@ public class DateUtils {
 		
 		String defaultTime = "2017-1-1 12:12:12";
 		
-		if (date != null && StringUtils.isEmpty(format)) {
+		if (date != null && !StringUtils.isEmpty(format)) {
 			
 			SimpleDateFormat sdf = new SimpleDateFormat(format);
 			String time = sdf.format(date);

@@ -21,5 +21,30 @@
 		select * from user
 		where user_account = #{account} and user_password = #{password};
 	</select>
-	
+	<!-- 查询新注册用户的id -->
+	<select id="findMaxID" resultType="int">
+		select max(user_id) from user;
+	</select>
+	<!-- 根据id查询用户信息 -->
+	<select id="findUserByID" parameterType="int" resultMap="userMap">
+		select * 
+		from user
+		where user_id = #{id}
+	</select>
+	<!-- 根据id更新用户信息 -->
+	<update id="updateUserInfo" parameterType="map">
+		update user
+		set user_account = #{account},
+		<if test="username!=null and username!=''">  
+    		user_name = #{username}, 
+		</if>
+		<if test="address!=null and address!=''">  
+    		user_address = #{address},
+		</if>
+		<if test="password!=null and password!=''">  
+    		user_password = #{password},
+		</if>
+		user_account = #{account}
+		where user_id=#{id}
+	</update>
 </mapper>

@@ -9,22 +9,25 @@ html, body {
 	font: 12px/1.125 Microsoft Yahei,Arial,Helvetica,sans-serif;
 	height: 100%;
 }
-div {
-	display: block;
-}
+/*
+	首界面导航菜单
+*/
 .navheader {
 	height: 68px;
 	background-color: #D0CED9;
 }
 .footer {
-	height: 68px;
+	height: 60px;
 	width: 80%;
 	margin: 0 auto;
 	clear: both;
 }
 .urllink {
 	text-align: center;
-	font-size:20px;
+	font-size:16px;
+}
+.urllink label:hover {
+	cursor:pointer;
 }
 .logo {
 	position: absolute;
@@ -36,7 +39,11 @@ div {
 	right: 200px;
 	top: 22px;
 	float: right;
-	font-size: 24px;
+	font-size: 20px;
+}
+.operate-link a {
+	text-decoration: none;
+	color: gray;
 }
 .operatorNav {
 	height: 68px;
@@ -44,8 +51,23 @@ div {
 	margin-left: 400px;
 	/*background-color: #D0CED9; */
 }
+
+.operate-link .user-menu {
+	display: none;
+}
+.operate-link:hover .user-menu {
+	display: block;
+	position:absolute;
+	width: 80px;
+	top: 25px;
+	font-size: 14px;
+	cursor:pointer;
+}
+/*
+	首界面	
+*/
 .indexMain {
-	height:650px;
+	height:600px;
 }
 .loginMain {
 	width: 80%;
@@ -87,14 +109,31 @@ div {
 	opacity: 0.8;
 	margin-top:50px;
 }
+
+/*
+	商家导航界面
+*/
+.goods-wrap {
+	height: 68px;
+	background-color: white;
+	z-index: 999;
+}
+.search-div {
+	width: 500px;
+	margin: 0 auto;	
+	padding: 10px;
+}
 /*
 	商家界面goods-main-tpl 
 */
 .page-wrap {
 	background-color: #F5F5F5;
-	min-height:500px;
 	display: block;
 	margin-bottom:30px;
+}
+.page-top {
+	height:15px;
+	background-color: #F5F5F5;
 }
 .inner-wrap {
 	background-color: white;
@@ -122,7 +161,7 @@ div {
 }
 .title-content {
 	width:822px;
-	padding-left: 140px;
+	padding-left: 180px;
 	zoom: 1;
 }
 .fl {
@@ -140,4 +179,71 @@ div {
 .fl a:hover {
 	text-decoration: none;
 	color: gold;
+}
+
+.page-slice {
+	height:15px;
+	background-color: #F5F5F5;
+}
+
+.rest-list {
+	overflow: hidden;
+}
+.list {
+	margin: 0 5px;
+	padding-top: 10px;
+	position: relative;
+	min-height: 300px
+}
+.rest-li {
+	width: 242px;
+	height: 288px;
+	float: left;
+	display: list-item;
+    text-align: -webkit-match-parent;
+    list-style-type: none;
+    cursor:pointer;
+}
+.rest-li:hover {
+	border: 1px solid gray;
+	opacity:0.5;
+}
+.rest-wrap {
+	padding: 20px;
+}
+.rest-info {
+	margin-top: 10px;
+}
+.rest-image img{
+	width: 210px;
+	height:160px;
+}
+.rest-no {
+	margin-bottom: 10px;
+	width:120px;
+	background-color: gray;
+}
+/*
+	用户个人中心
+*/
+
+.setting-wrap {
+	background-color: #F5F5F5;
+	display: block;
+	height: 550px;
+}
+.left-side{
+	float: left;
+	width: 25%;
+	height: 550px;
+	background-color: #FAFAFA;
+}
+.right-side {
+	float: left;
+	width: 75%;
+	height: 550px;
+	padding-left: 30px;
+}
+.right-side p {
+	font-size: 16px;
 }

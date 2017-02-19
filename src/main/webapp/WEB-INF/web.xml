@@ -7,7 +7,7 @@
 		<small-icon>/images/logo.png</small-icon>
 		<large-icon>/images/logo.jpg</large-icon>
 	</icon>
-	<display-name>meidiandian</display-name>
+	<display-name>美点点，您身边的美食专家</display-name>
 		
   	<context-param>
 		<param-name>contextConfigLocation</param-name>

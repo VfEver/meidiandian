@@ -1,5 +1,7 @@
 package com.meidiandian.service;
 
+import java.util.Map;
+
 import com.meidiandian.entity.User;
 
 public interface IUserService {
@@ -17,4 +19,23 @@ public interface IUserService {
 	 * @param user
 	 */
 	public void saveUser(User user);
+	
+	/**
+	 * 查询最大id，也就是当前新注册用户的id
+	 * @return
+	 */
+	public int findMaxID();
+	
+	/**
+	 * 根据id查询用户信息
+	 * @param id
+	 * @return
+	 */
+	public User findUserByID(int id);
+	
+	/**
+	 * 更新用户信息
+	 * @param map
+	 */
+	public void updateUserInfo(Map<String, String> map);
 }

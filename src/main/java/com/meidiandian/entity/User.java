@@ -2,8 +2,6 @@ package com.meidiandian.entity;
 
 import java.util.Date;
 
-import javax.xml.crypto.Data;
-
 /**
  * user entity class
  * @author zys

@@ -35,4 +35,29 @@ public class UserDao implements IUserDao {
 		sqlSession.commit();
 		sqlSession.close();
 	}
+	@Override
+	public int findMaxID() {
+		
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		int id = sqlSession.selectOne(User.class.getName() + ".findMaxID");
+		sqlSession.close();
+		return id;
+	}
+	@Override
+	public User findUserByID(int id) {
+
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		User user = sqlSession.selectOne(User.class.getName() + ".findUserByID", id);
+		sqlSession.close();
+		
+		return user;
+	}
+	@Override
+	public void updateUserInfo(Map<String, String> map) {
+		
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		sqlSession.update(User.class.getName() + ".updateUserInfo", map);
+		sqlSession.commit();
+		sqlSession.close();
+	}
 }

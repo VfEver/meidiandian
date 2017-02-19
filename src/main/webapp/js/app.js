@@ -51,10 +51,24 @@ angular.module("meidiandian", ['ui.router', 'controllers'])
 		url: '/goods',
 		views: {
 			'navinfo': {
-				templateUrl: ''
+				templateUrl: 'tpls/goods-nav-tpl.html'
 			},
 			'main': {
 				templateUrl: 'tpls/goods-main-tpl.html'
+			},
+			'footer': {
+				templateUrl: 'tpls/index-footer-tpl.html'
+			}
+		}
+	})
+	.state('settings', {
+		url: '/settings',
+		views: {
+			'navinfo': {
+				templateUrl: 'tpls/goods-nav-tpl.html'
+			},
+			'main': {
+				templateUrl: 'tpls/settings-main-tpl.html'
 			},
 			'footer': {
 				templateUrl: 'tpls/index-footer-tpl.html'

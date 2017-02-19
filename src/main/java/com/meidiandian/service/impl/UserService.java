@@ -1,5 +1,7 @@
 package com.meidiandian.service.impl;
 
+import java.util.Map;
+
 import com.meidiandian.dao.IUserDao;
 import com.meidiandian.entity.User;
 import com.meidiandian.service.IUserService;
@@ -18,6 +20,21 @@ public class UserService implements IUserService{
 	public void saveUser(User user) {
 
 		userDao.saveUser(user);
+	}
+	@Override
+	public int findMaxID() {
+
+		return userDao.findMaxID();
+	}
+	@Override
+	public User findUserByID(int id) {
+
+		return userDao.findUserByID(id);
+	}
+	@Override
+	public void updateUserInfo(Map<String, String> map) {
+		
+		userDao.updateUserInfo(map);
 	}
 	
 }
