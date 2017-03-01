@@ -1,0 +1,47 @@
+<div class="page-wrap" ng-controller="storeController">
+	<div class="page-top"></div>
+	<div class="inner-wrap">
+		<div class="rest-banner">
+			<div class="title-wrap">
+				<span class="sort-list glyphicon glyphicon-cutlery"> 商家分类</span>
+				<ul class="title-content">
+					<li class="fl">
+						<a href="javascript:void(0);"><span>全部</span></abbr></a>
+					</li>
+					<li class="fl">
+						<a href="javascript:void(0);"><span>美食</span></abbr></a>
+					</li>
+					<li class="fl">
+						<a href="javascript:void(0);"><span>正餐</span></abbr></a>
+					</li>
+					<li class="fl">
+						<a href="javascript:void(0);"><span>超市</span></abbr></a>
+					</li>
+					<li class="fl">
+						<a href="javascript:void(0);"><span>小吃</span></abbr></a>
+					</li>
+					<li class="fl">
+						<a href="javascript:void(0);"><span>鲜果</span></abbr></a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="page-slice"></div>
+		<div class="rest-list">
+			<ul class="list">
+				<li class="rest-li" ng-repeat="store in storeList" ng-click="checkDetail(store.id)">
+					<div class="rest-wrap">
+						<div class="rest-image">
+							<img ng-src="{{store.storeImage}}" />
+						</div>
+						<div class="rest-info">
+							<h5>{{store.storeName}}</h5>
+							<span class="badge">{{store.storeHours}}</span>
+							<div>起送：￥10   配送费：￥{{store.cost}}</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

@@ -215,7 +215,7 @@ html, body {
 	margin-top: 10px;
 }
 .rest-image img{
-	width: 210px;
+	width: 200px;
 	height:160px;
 }
 .rest-no {
@@ -246,4 +246,139 @@ html, body {
 }
 .right-side p {
 	font-size: 16px;
+}
+
+.goods-list li {
+	list-style-type: none;
+	height: 50px;
+	margin: 10px 10px 10px 5px;
+	background-color: #F5F5F5;
+}
+.goods-li {
+ 	border:2px solid #efefef;
+	box-shadow: 0px 1px 4px rgba(0,0,0,0.27);
+}
+.goods-li:hover {
+	cursor:pointer;
+}
+.goods-img img {
+	height: 48px;
+	width: 48px;
+	float: left;
+}
+
+/**
+	商品详情页
+*/
+.goods-page {
+	min-height: 550px;
+	background-color: #F5F5F5;
+}
+.store-info {
+	width: 865px;
+	margin: 0 auto;
+    height: 121px;
+    border: 1px solid #ebebeb;
+    border-right: 0 none;
+    background-color: #fff;
+    overflow: hidden;
+}
+.detail {
+	min-width: 330px;
+    max-width: 52%;
+    top: 0;
+    left: 0;
+    padding-right: 10px;
+    overflow: hidden;
+}
+.store-image img {
+	margin-left: 20px;
+    margin-top: 15px;
+	width: 120px;
+	height: 90px;
+	border: 1px solid #eee;
+    float: left;
+}
+.store-detail {
+	margin-left: 5px;
+    float: left;
+}
+.right-bar {
+	float: right;
+}
+.post-time, .begin-cost, .post-cost {
+	float: left;
+	margin: 30px;
+}
+.goods-detail {
+	width: 865px;
+	margin: 0 auto;
+	min-height: 400px;
+	background-color: #F5F5F5;
+	overflow: hidden;
+}
+.store-notice {
+	float: right;
+	width: 130px;
+	background-color: #fff;
+    border: 1px solid #ebebeb;
+}
+.store-left {
+	float: left;
+	width: 714px;
+	background-color: #fff;
+}
+.goods-header {
+	height: 50px;
+    font-size: 16px;
+    padding-left: 19px;
+    padding-top: 15px;
+    background-color: #fafafa;
+    border-bottom: 1px solid #ebebeb;
+ 	color: #313131;	
+}
+
+
+.food-ul li {
+	list-style-type: none;
+}
+.foods-li {
+	margin: 0 auto;
+	float: left;
+}
+.goods-info {
+    width: 238px;
+    height: 270px;
+    border-right: 1px dashed #DDD;
+    border-bottom: 1px dashed #DDD;
+    padding-right: 1px;
+}
+.goods-inner-wrap {
+	width: 200px;
+	margin: 0 auto;
+	padding: 10px 0 0 0;
+}
+.food-image img{
+	height: 146px;
+}
+.food-pos {
+	margin-top: 20px;
+}
+.food-add {
+	float: right;
+}
+.food-cost {
+    font-size: 14px;
+    color: #fe4d3d;
+    font-weight: 700;
+}
+.foods-li:hover {
+	background-color: #fffdf0;
+}
+.cart {
+	background-color: #fff;
+	position: fixed;
+	right: 200px;
+	bottom: 10px;
+	float: right;
 }

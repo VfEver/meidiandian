@@ -1,5 +1,14 @@
 package com.meidiandian.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import net.sf.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +18,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import sun.misc.BASE64Decoder;
+
 import com.meidiandian.entity.Store;
 import com.meidiandian.service.IStoreService;
 import com.meidiandian.util.StringUtils;
 
+@SuppressWarnings("restriction")
 @Controller
 @RequestMapping("/store")
 public class StoreController {
@@ -47,6 +59,7 @@ public class StoreController {
 				json.put("storeHours", store.getStoreHours());
 				json.put("storeAddress", store.getStoreAddress());
 				json.put("cost", store.getCost());
+				json.put("storeImage", store.getStoreImage());
 			}
 			
 		} else {
@@ -105,6 +118,153 @@ public class StoreController {
 		} else {
 			json.put("status", -1);
 			json.put("reason", "创建店铺失败，请重试！");
+		}
+		
+		return json.toString();
+	}
+	
+	/**
+	 * 更新店铺信息
+	 * @param id
+	 * @param userID
+	 * @param storeName
+	 * @param storeAddress
+	 * @param storeHours
+	 * @param cost
+	 * @return
+	 */
+	@RequestMapping(value="/updatestore", method=RequestMethod.POST, produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String updateStore(
+			@RequestParam(value = "id", defaultValue = "") String id,
+			@RequestParam(value = "userID", defaultValue = "") String userID,
+			@RequestParam(value = "storeName", defaultValue = "") String storeName,
+			@RequestParam(value = "storeAddress", defaultValue = "") String storeAddress,
+			@RequestParam(value = "storeHours", defaultValue = "") String storeHours,
+			@RequestParam(value = "cost", defaultValue = "0") String cost
+			) {
+		
+		JSONObject json = new JSONObject();
+		
+		if (!StringUtils.isEmpty(id)) {
+			
+			json.put("status", 200);
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("id", id);
+			map.put("userID", userID);
+			map.put("storeName", storeName);
+			map.put("storeAddress", storeAddress);
+			map.put("storeHours", storeHours);
+			map.put("cost", cost);
+			
+			storeService.updateStore(map);
+			
+		} else {
+			json.put("status", -1);
+			json.put("reason", "创建店铺失败，请重试！");
+		}
+		
+		return json.toString();
+	}
+	
+	/**
+	 * 更新店铺图片
+	 * @param id
+	 * @param img
+	 * @return
+	 */
+	@RequestMapping(value="/storeimg", method=RequestMethod.POST, produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String updateStore(
+			@RequestParam(value = "id", defaultValue = "") String id,
+			@RequestParam(value = "img", defaultValue = "") String img,
+			HttpServletRequest request) {
+		
+		JSONObject json = new JSONObject();
+		
+		if (!StringUtils.isEmpty(id)) {
+			json.put("status", 200);
+			String suffix = img.split(",")[0].split("/")[1].split(";")[0];
+			String fileName = null;
+			String imageIO = img.split(",")[1];
+			if (imageIO != null) {
+				BASE64Decoder decoder = new BASE64Decoder();
+				try {
+					// Base64解码
+					byte[] b = decoder.decodeBuffer(imageIO);
+					for (int i = 0; i < b.length; ++i) {
+						if (b[i] < 0) {// 调整异常数据
+							b[i] += 256;
+						}
+					}
+					String fatherPath = request.getSession().getServletContext().getRealPath("") + "storeImgs";//tomcat下
+					File f = new File(fatherPath);
+					fileName = System.currentTimeMillis() + "." + suffix;
+					File file = new File(f, fileName);
+					if (!file.exists()) {
+						file.createNewFile();
+					}
+					OutputStream os = new FileOutputStream(file);
+					os.write(b);
+					os.flush();
+					os.close();
+					f = new File("D:\\MyEclipse\\meidiandian\\src\\main\\webapp\\storeImgs");
+					if (!f.exists()) {
+						f.mkdir();
+					}
+					file = new File(f, fileName);
+					if (!file.exists()) {
+						file.createNewFile();
+					}
+					os = new FileOutputStream(file);
+					os.write(b);
+					os.flush();
+					os.close();
+					fileName = "storeImgs/" + fileName;
+					
+					Map<String, String> map = new HashMap<>();
+					map.put("id", id);
+					map.put("imgURL", fileName);
+					
+					storeService.updateStoreImg(map);
+				} catch (Exception e) {
+					fileName = "storeImgs/beerduck.jpg";
+					e.printStackTrace();
+				}
+			} else {
+				fileName = "storeImgs/beerduck.jpg";
+			}
+			json.put("imgURL", fileName);
+
+		} else {
+			json.put("status", -1);
+		}
+		
+		return json.toString();
+	}
+	
+	/**
+	 * 根据城市查询店铺信息
+	 * @param city
+	 * @return
+	 */
+	@RequestMapping(value="/findstore", method=RequestMethod.GET, produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String findStoreByCity(
+			@RequestParam(value = "city", defaultValue = "聊城") String city) {
+		
+		JSONObject json = new JSONObject();
+		
+		if (!StringUtils.isEmpty(city)) {
+			
+			json.put("status", 200);
+			city = "%" + city + "%";
+			List<Store> storeList = storeService.findStoreByCity(city);
+			json.put("storeList", storeList);
+			
+		} else {
+			json.put("status", -1);
+			json.put("reason", "出现问题，请重试");
 		}
 		
 		return json.toString();

@@ -8,8 +8,10 @@
 		<result property="storeName" column="store_name"/>
 		<result property="storeHours" column="store_hours"/>
 		<result property="storeAddress" column="store_address"/>
-		<result property="cost" column="cost"/>		
+		<result property="cost" column="cost"/>
+		<result property="storeImage" column="store_image"/>
 	</resultMap>
+	
 	<!-- 根据用户的id找出他所开的店铺 -->
 	<select id="selectStoreByUserID" parameterType="int" resultMap="storeMap">
 		select * from store
@@ -19,4 +21,38 @@
 		insert into store(user_id, store_name, store_hours, store_address, cost) 
 		values (#{userID}, #{storeName}, #{storeHours}, #{storeAddress}, #{cost});
 	</insert>
+	
+	<!-- 更新店铺信息 -->
+	<update id="updateStoreInfo" parameterType="map">
+		update store
+		set user_id = #{userID},
+		<if test="storeName != null and storeName != ''">
+			store_name = #{storeName},
+		</if>
+		<if test="storeAddress != null and storeAddress != ''">
+			store_address = #{storeAddress},
+		</if>
+		<if test="storeHours != null and storeHours != ''">
+			store_hours = #{storeHours},
+		</if>
+		<if test="cost != null and cost != ''">
+			cost = #{cost},
+		</if>
+		user_id = #{userID}
+		where store_id = #{id}
+	</update>
+	
+	<!-- 更新店铺图片 -->
+	<update id="updateStoreImg" parameterType="string">
+		update store
+		set store_image = #{imgURL}
+		where store_id = #{id};
+	</update>
+	
+	<!-- 根据城市查询店铺 -->
+	<select id="findStoreByCity" parameterType="string" resultMap="storeMap">
+		select *
+		from store
+		where store_address like #{city};
+	</select>
 </mapper>

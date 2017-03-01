@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+	<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.meidiandian.entity.Goods">
+	<resultMap type="goods" id="goodsMap">
+		<id property="id" column="goods_id"/>
+		<result property="storeID" column="store_id"/>
+		<result property="goodsName" column="goods_name"/>
+		<result property="goodsPrice" column="goods_price"/>
+		<result property="goodsImage" column="goods_image"/>
+	</resultMap>
+	
+	<!-- 选择特定店铺内的商品 -->
+	<select id="findGoodsByStoreID" parameterType="int" resultMap="goodsMap">
+		select * 
+		from goods
+		where store_id = #{id}
+	</select>
+	
+	<!-- 查询id商品的详细信息 -->
+	<select id="findGoodsByID" parameterType="int" resultMap="goodsMap">
+		select * from goods
+		where goods_id = #{id}
+	</select>
+	
+	<!-- 更新商品信息 -->
+	<update id="updateGoodsByID" parameterType="map">
+		update goods
+		set goods_add = 1,
+		<if test="goodsName != null and goodsName != ''">
+			goods_name = #{goodsName},
+		</if>
+		<if test="goodsPrice != null and goodsPrice != ''">
+			goods_price = #{goodsPrice},
+		</if>
+		goods_add = 1
+		where goods_id=#{goodsID};
+	</update>
+	
+	<!-- 删除商品 -->
+	<delete id="deleteGoodsByID" parameterType="int">
+		delete 
+		from goods
+		where goods_id = #{id}
+	</delete>
+	
+	<!-- 保存新的商品 -->
+	<insert id="saveGoods" parameterType="goods">
+		insert into goods(store_id, goods_name, goods_price, goods_image)
+		values(#{storeID},#{goodsName},#{goodsPrice},#{goodsImage});
+	</insert>
+</mapper>

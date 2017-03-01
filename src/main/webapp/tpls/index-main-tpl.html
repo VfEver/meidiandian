@@ -1,9 +1,9 @@
-<div class="indexMain">
+<div class="indexMain" ng-controller="storeController">
 	<img alt="cake" src="images/cake.jpg" class="blur">
 	<div class="search">
 		<div class="input-group">
 			<input type="text" ng-model="city" class="form-control input-lg" placeholder="输入城市，即刻美食"/>
-			<span class="input-group-addon btn btn-primary">搜索</span>
+			<span class="input-group-addon btn btn-primary" ng-click="searchStore()">搜索</span>
 		</div>
 		<div class="sign">
 			<div style="float:left; width:70%; margin-top: 50px; margin-left:20px">

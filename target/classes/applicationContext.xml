@@ -74,4 +74,11 @@
 	  	<property name="storeDao" ref="storeDaoID"></property>
 	  </bean>
 	  
+	  <bean id="goodsDaoID" class="com.meidiandian.dao.impl.GoodsDao">
+	  	<property name="sqlSessionFactory" ref="sqlSessionFactoryBeanID"></property>
+	  </bean>
+	  <bean id="goodsServiceID" class="com.meidiandian.service.impl.GoodsService">
+	  	<property name="goodsDao" ref="goodsDaoID"></property>
+	  </bean>
+	  
 </beans>

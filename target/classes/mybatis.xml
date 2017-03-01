@@ -6,5 +6,6 @@
 	<typeAliases>
 		<typeAlias type="com.meidiandian.entity.User" alias="user"/>
 		<typeAlias type="com.meidiandian.entity.Store" alias="store"/>
+		<typeAlias type="com.meidiandian.entity.Goods" alias="goods"/>
 	</typeAliases>
 </configuration>

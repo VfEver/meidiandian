@@ -64,7 +64,12 @@
 							<td><p>营业时间：</td><td><input ng-model="storeHours" type="text" class="form-control" placeholder="格式：0-24"/></p></td>
 						</tr>
 						<tr>
-							<td><p>起送金额：</td><td><input ng-model="cost" type="text" class="form-control" placeholder="例如：3"/></p></td>
+							<td><p>起送金额：</td>
+							<td>
+							<div class="input-group">
+								<span class="input-group-addon">￥</span><input ng-model="cost" type="text" class="form-control" placeholder="例如：3"/></p>
+							</div>
+							</td>
 						</tr>
 						<tr>
 							<td><button class="btn btn-default" ng-click="saveStore()">创建店铺</button></td>
@@ -99,12 +104,107 @@
 							<td><input ng-model="cost" type="text" class="form-control" placeholder="例如：3"/></td>
 						</tr>
 						<tr>
-							<td><button class="btn btn-default" ng-click="updateStore()">更新店铺</button></td>
+							<td><p>店铺图片：</p></td>
+							<td class="rest-image"><img alt="store image" ng-src="{{storeImg}}"></td>
+							<td><input type="file" id="uploadImg" /></td>
+						</tr>
+						<tr>
+							<td><button class="btn btn-default" ng-click="updateStoreInfo()">更新店铺</button></td>
+							
+							<td><button class="btn btn-success" ng-click="findGoods()">商品管理</button></td>
 						</tr>
 					</table>
 					</div>
 				</div>
 			</div>
+			
+			<div class="goods-list" ng-show="goodsPage">
+				<div class="goods-head" style="margin:10px 0 5px 10px">
+					<span class="glyphicon glyphicon-arrow-left" ng-click="back()" style="cursor:pointer;"></span>
+					<button class="btn btn-success" ng-click="addNewGoodsBtn()">添加商品</button>
+				</div>
+				<ul ng-repeat="goods in goodsList">
+					<li class="goods-li" ng-click="checkGoods(goods.goodsID)">
+						<div class="goods-img"><img ng-src="{{goods.image}}" /></div>
+						<div>
+							<p>名称：{{goods.name}}</p>
+							<p>价格：￥{{goods.price}}</p>
+						</div>
+					</li>
+				</ul>
+			</div>
+			
+			<div class="modal" id="goodsDetailModal">
+			    <div class="modal-dialog">
+			        <div class="modal-content">
+			            <div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+							<h4 class="modal-title"><span>{{goodsName}}</span>商品详情</h4>
+						</div>
+						<div class="modal-body">
+							<table>
+								<tr>
+									<td><p>商品名称：</p></td><td>{{goodsName}}</td>
+									<td><input ng-model="goodsName" type="text" class="form-control" placeholder="例如：豆腐脑"/></td>
+								</tr>
+								<tr>
+									<td><p>商品价格：</p></td><td>￥{{goodsPrice}}</td>
+									<td>
+									<div class="input-group">
+										<span class="input-group-addon">￥</span><input ng-model="goodsPrice" type="text" class="form-control" placeholder="例如：3"/>
+									</div>
+									</td>
+								</tr>
+								<tr>
+									<td><p>商品图片：</p></td>
+									<td><div class="goods-img"><img ng-src="{{goodsImage}}" /></div></td>
+								</tr>
+							</table>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-error" ng-click="deleteGoods()" data-dismiss="modal">删除</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+							<button type="button" class="btn btn-primary" ng-click="updateGoodsInfo()" data-dismiss="modal">更新</button>
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
+			
+			<div class="modal" id="newGoodsModal">
+			    <div class="modal-dialog">
+			        <div class="modal-content">
+			            <div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+							<h4 class="modal-title">添加商品</h4>
+						</div>
+						<div class="modal-body">
+							<table>
+								<tr>
+									<td><p>商品名称：</p>
+									<td><input ng-model="newGoodsName" type="text" class="form-control" placeholder="例如：豆腐脑"/></td>
+								</tr>
+								<tr>
+									<td><p>商品价格：</p></td>
+									<td>
+									<div class="input-group">
+										<span class="input-group-addon">￥</span><input ng-model="newGoodsPrice" type="text" class="form-control" placeholder="例如：3"/>
+									</div>
+									</td>
+								</tr>
+								<tr>
+									<td><p>商品图片：</p></td>
+									<td><input type="file" id="goodsImg"/></td>
+								</tr>
+							</table>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+							<button type="button" class="btn btn-primary" ng-click="addNewGoods()" data-dismiss="modal">更新</button>
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
+			
 		</div>
 	</div>
 </div>

@@ -1,5 +1,8 @@
 package com.meidiandian.dao.impl;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
@@ -31,6 +34,34 @@ public class StoreDao implements IStoreDao{
 		sqlSession.commit();
 		sqlSession.close();
 		
+	}
+
+	@Override
+	public void updateStore(Map<String, String> map) {
+
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		sqlSession.update(Store.class.getName() + ".updateStoreInfo", map);
+		sqlSession.commit();
+		sqlSession.close();
+		
+	}
+
+	@Override
+	public void updateStoreImg(Map<String, String> map) {
+
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		sqlSession.update(Store.class.getName() + ".updateStoreImg", map);
+		sqlSession.commit();
+		sqlSession.close();
+	}
+
+	@Override
+	public List<Store> findStoreByCity(String city) {
+
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		List<Store> storeList = sqlSession.selectList(Store.class.getName() + ".findStoreByCity", city);
+		sqlSession.close();
+		return storeList;
 	}
 
 }

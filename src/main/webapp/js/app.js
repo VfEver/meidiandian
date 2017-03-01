@@ -47,11 +47,25 @@ angular.module("meidiandian", ['ui.router', 'controllers'])
 			}
 		}
 	})
+	.state('store', {
+		url: '/store',
+		views: {
+			'navinfo': {
+				templateUrl: 'tpls/store-nav-tpl.html'
+			},
+			'main': {
+				templateUrl: 'tpls/store-main-tpl.html'
+			},
+			'footer': {
+				templateUrl: 'tpls/index-footer-tpl.html'
+			}
+		}
+	})
 	.state('goods', {
 		url: '/goods',
 		views: {
 			'navinfo': {
-				templateUrl: 'tpls/goods-nav-tpl.html'
+				templateUrl: 'tpls/store-nav-tpl.html'
 			},
 			'main': {
 				templateUrl: 'tpls/goods-main-tpl.html'
@@ -65,7 +79,7 @@ angular.module("meidiandian", ['ui.router', 'controllers'])
 		url: '/settings',
 		views: {
 			'navinfo': {
-				templateUrl: 'tpls/goods-nav-tpl.html'
+				templateUrl: 'tpls/store-nav-tpl.html'
 			},
 			'main': {
 				templateUrl: 'tpls/settings-main-tpl.html'

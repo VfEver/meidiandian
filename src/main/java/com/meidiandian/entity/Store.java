@@ -8,6 +8,7 @@ public class Store {
 	private String storeHours;
 	private String storeAddress;
 	private double cost;
+	private String storeImage;
 	public int getId() {
 		return id;
 	}
@@ -43,6 +44,12 @@ public class Store {
 	}
 	public void setCost(double cost) {
 		this.cost = cost;
+	}
+	public String getStoreImage() {
+		return storeImage;
+	}
+	public void setStoreImage(String storeImage) {
+		this.storeImage = storeImage;
 	}
 	
 }
