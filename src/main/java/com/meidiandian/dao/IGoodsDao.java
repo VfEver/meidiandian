@@ -38,4 +38,10 @@ public interface IGoodsDao {
 	 * @param goods
 	 */
 	public void saveGoods(Goods goods);
+	
+	/**
+	 * 订单完成后更新商品卖出数量
+	 * @param map
+	 */
+	public void addGoodsNum(Map<String, Integer> map);
 }

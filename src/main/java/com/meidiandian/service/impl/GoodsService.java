@@ -43,4 +43,10 @@ public class GoodsService implements IGoodsService{
 		goodsDao.saveGoods(goods);
 	}
 
+	@Override
+	public void addGoodsNum(Map<String, Integer> map) {
+
+		goodsDao.addGoodsNum(map);
+	}
+
 }

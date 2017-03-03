@@ -8,6 +8,7 @@
 		<result property="goodsName" column="goods_name"/>
 		<result property="goodsPrice" column="goods_price"/>
 		<result property="goodsImage" column="goods_image"/>
+		<result property="soldNumber" column="sold_number"/>
 	</resultMap>
 	
 	<!-- 选择特定店铺内的商品 -->
@@ -49,4 +50,11 @@
 		insert into goods(store_id, goods_name, goods_price, goods_image)
 		values(#{storeID},#{goodsName},#{goodsPrice},#{goodsImage});
 	</insert>
+	
+	<update id="addGoodsNum" parameterType="map">
+		update goods
+		set sold_number = sold_number + #{number}
+		where goods_id = #{id};
+	</update>
+	
 </mapper>

@@ -64,4 +64,12 @@ public class StoreDao implements IStoreDao{
 		return storeList;
 	}
 
+	@Override
+	public Store selectStoreByID(int storeID) {
+		
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		Store store = sqlSession.selectOne(Store.class.getName() + ".selectStoreByID", storeID);
+		sqlSession.close();
+		return store;
+	}
 }

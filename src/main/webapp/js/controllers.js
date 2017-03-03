@@ -87,6 +87,7 @@ angular.module('controllers', ['ngCookies'])
 	//查询店铺商品信息
 	$scope.checkDetail = function (id) {
 		$location.path("goods");
+		$cookies.put("storeID", id);
 	}
 }])
 .controller('registerController', ['$scope', '$location', '$cookies', '$cookieStore', function($scope, $location, $cookies, $cookieStore) {
@@ -150,8 +151,179 @@ angular.module('controllers', ['ngCookies'])
 	}
 	
 }])
-.controller('registerController', ['$scope', '$location', '$cookies', '$cookieStore', function($scope, $location, $cookies, $cookieStore) {
+.controller('goodsController', ['$scope', '$location', '$cookies', '$cookieStore', function($scope, $location, $cookies, $cookieStore) {
 	
+	//获取店铺商品信息
+	function getGoodsDetail() {
+		$.ajax({
+			url: '/meidiandian/goods/goodsdetail.do',
+			data: {
+				id: $cookies.get("storeID")
+			},
+			type: 'POST',
+		})
+		.then(function(data) {
+			var res = JSON.parse(data);
+			
+			if(res.status == 200) {
+				$scope.goodsList = res.goodsList;
+				$scope.$apply();
+			}
+		});
+	}
+	
+	//获取店铺信息
+	function getStoreDetail() {
+		$.ajax({
+			url: '/meidiandian/store/storemsg.do',
+			data: {
+				storeID: $cookies.get("storeID")
+			},
+			type: 'POST',
+		})
+		.then(function(data) {
+			var res = JSON.parse(data);
+			
+			if(res.status == 200) {
+				$scope.store = res.store;
+				$scope.totalPrice = $scope.store.cost;
+				$scope.$apply();
+			}
+		});
+	}
+	
+	getGoodsDetail();
+	getStoreDetail();
+	
+	$scope.cartGoods = [];	//商品信息数组
+	$scope.tableShow = false;	//商品信息显示与否
+	$scope.cartInfoShow = false;	//商品件数和总价显示与否
+	
+	var goodsIndex = [];	//已经添加商品下标
+	var j = 0;	//已经添加商品下标的下标
+	$scope.cartGoodsNumber = 0;	//购物车商品的总量
+	
+	//点击添加按钮实现将商品添加至购物车
+	$scope.addGoodsToCart = function (i, img) {
+		$scope.tableShow = true;
+		$scope.cartInfoShow = true;
+		
+		if (goodsIndex.indexOf(i) != -1) {	//如果已经添加了此商品
+			
+			var findIndex = goodsIndex.indexOf(i);
+			++$scope.cartGoods[findIndex].number;
+			
+		} else {	//如果没有添加
+			goodsIndex[j++] = i;
+			
+			$scope.cartGoods[$scope.cartGoods.length] = $scope.goodsList[i];
+			$scope.cartGoods[$scope.cartGoods.length-1].index = i;	//存储商品在所有商品中的下标位置
+			$scope.cartGoods[$scope.cartGoods.length-1].number = 1;
+		}
+		++$scope.cartGoodsNumber;
+		
+		$scope.totalPrice += Number($scope.goodsList[i].price);
+		
+//		//实现飞入效果
+//		    var offset = $(".cart").offset(); 
+//		    $(".add-cart").click(function(event){ 
+//		        var addcar = $(this); 
+//		        var flyer = $('<img class="u-flyer" src="'+img+'">'); 
+//		        flyer.fly({ 
+//		            start: { 
+//		                left: event.pageX, //开始位置（必填）#fly元素会被设置成position: fixed 
+//		                top: event.pageY //开始位置（必填） 
+//		            }, 
+//		            end: { 
+//		                left: offset.left+10, //结束位置（必填） 
+//		                top: offset.top+10, //结束位置（必填） 
+//		                width: 0, //结束时宽度 
+//		                height: 0 //结束时高度 
+//		            }, 
+//		            onEnd: function(){ //结束回调
+//		            } 
+//		        }); 
+//		    }); 
+	}
+	
+	//点击减号删除商品
+	$scope.minusNumber = function (index) {
+		
+		$scope.totalPrice -= Number($scope.cartGoods[index].price);
+		if (--$scope.cartGoods[index].number == 0) {
+			goodsIndex.splice(goodsIndex.indexOf($scope.cartGoods[index].index), 1);	//删除添加商品下标数组中不存在商品的下标
+			--j;
+			$scope.cartGoods.splice(index, 1);
+		}
+		if (--$scope.cartGoodsNumber == 0) {
+			$scope.tableShow = false;
+			$scope.cartInfoShow = false;
+		}
+	} 
+	
+	//点击加号增加商品
+	$scope.addNumber = function (index) {
+		
+		++$scope.cartGoods[index].number;
+		++$scope.cartGoodsNumber;
+		$scope.totalPrice += Number($scope.cartGoods[index].price);
+	}
+	
+	//结账页面，弹出模态框
+	$scope.payForGoods = function () {
+		$("#payModal").modal("toggle");
+		
+		if ($cookies.get("id") == null || $cookies.get("id") == undefined) {
+			alert("请登录...");
+			$location.path("login");
+		} else {
+			
+			$.ajax({
+				url: '/meidiandian/user/userinfo.do',
+				data: {
+					id: $cookies.get("id")
+				},
+				type: 'GET',
+			})
+			.then(function(data) {
+				var res = JSON.parse(data);
+				if(res.status == 200) {
+					$scope.username = res.username;
+					$scope.address = res.address;
+					$scope.$apply();
+				}
+			});
+		}
+		
+	}
+	
+	//结账
+	$scope.payNow = function () {
+		
+		var obj = [];
+		for (var index in $scope.goodsList) {
+			var temp = {};
+			temp[$scope.goodsList[index].goodsID] = $scope.goodsList[index].number;
+			obj[index] = temp;
+		}
+		
+		//增加商品出售数量
+		$.ajax({
+			url: '/meidiandian/goods/addnum.do',
+			data: JSON.stringify(obj),
+			contentType: 'application/json',
+			type: 'GET',
+		})
+		.then(function(data) {
+			var res = JSON.parse(data);
+			if(res.status != 200) {
+				alert("付款失败!请重试");
+			}
+		});
+		
+		//保存订单信息
+		
+	}
 	
 }])
 .controller('settingsController', ['$scope', '$location', '$cookies', '$http', function($scope, $location, $cookies, $http) {

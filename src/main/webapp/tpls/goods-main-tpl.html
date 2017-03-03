@@ -8,23 +8,23 @@
 				<p>平均送餐时间</p>
 			</div>
 			<div class="begin-cost">
-				<strong style="font-size: 30px">20</strong>元
+				<strong style="font-size: 30px">10</strong>元
 				<p>起送</p>
 			</div>
 			<div class="post-cost">
-				<strong style="font-size: 30px">4</strong>元
+				<strong style="font-size: 30px">{{store.cost}}</strong>元
 				<p>配送费</p>
 			</div>
 		</div>
 	
 		<div class="detail">
 			<div class="store-image">
-				<img alt="store image" src="images/1.jpg">
+				<img alt="store image" ng-src="{{store.storeImage}}">
 			</div>
 			<div class="store-detail">
-				<h3>黄记煌（凤八民生店）</h3>
-				<h6>营业时间：10:30-12:00</h6>
-				<h6>商家地址：凤城八路和文景路十字西北角民生百货4F04</h6>
+				<h3>{{store.storeName}}</h3>
+				<div style="margin-top:12px; font-size: 14px">营业时间：{{store.storeHours}}</div>
+				<div style="margin-top:12px; font-size: 14px">商家地址：{{store.storeAddress}}</div>
 			</div>
 		</div>
 		
@@ -32,7 +32,7 @@
 	<div class="page-slice"></div>
 	<div class="goods-detail">
 		<div class="store-notice">
-			<div style="background-color: #F5F5F5; font-size: 16px;">订餐必知&商家公示</div>
+			<div style="background-color: #F5F5F5; font-size: 15px;">订餐必知&商家公示</div>
 			<div style="font-size: 12px; margin-top: 10px;">本店每天退出特价菜，请及时抢购</div>
 		</div>
 		<div class="store-left">
@@ -40,77 +40,124 @@
 				<span>商品详情</span>
 			</div>
 			<ul class="food-ul">
-				<li class="foods-li">
+				
+				<li class="foods-li" ng-repeat="goods in goodsList">
 					<div class="goods-info">
 					<div class="goods-inner-wrap">
 						<div class="food-image">
-							<img src="goodsImgs/1.jpg" />
+							<img ng-src="{{goods.image}}" />
 						</div>
-						<div><h4>回锅肉盖饭</h4></div>
-						<div class="food-number">已售17份</div>
+						<div><h4>{{goods.name}}</h4></div>
+						<div class="food-number">已售{{goods.soldNumber}}份</div>
 						<div class="food-pos">
-							<div class="food-add"><span class="glyphicon glyphicon-plus" style="color: gold;"></span></div>
-							<div class="food-cost">￥18元</div>
+							<div class="food-add">
+								<span class="glyphicon glyphicon-plus add-cart" style="color: gold; cursor: pointer;" ng-click="addGoodsToCart($index, goods.image)"></span>
+							</div>
+							<div class="food-cost">￥{{goods.price}}元</div>
 						</div>
 					</div>
 					</div>
 				</li>
 				
-				
-				<li class="foods-li">
-					<div class="goods-info">
-					<div class="goods-inner-wrap">
-						<div class="food-image">
-							<img src="goodsImgs/1.jpg" />
-						</div>
-						<div><h4>回锅肉盖饭</h4></div>
-						<div class="food-number">已售17份</div>
-						<div class="food-pos">
-							<div class="food-add"><span class="glyphicon glyphicon-plus" style="color: gold;"></span></div>
-							<div class="food-cost">￥18元</div>
-						</div>
-					</div>
-					</div>
-				</li>
-				
-				
-				<li class="foods-li">
-					<div class="goods-info">
-					<div class="goods-inner-wrap">
-						<div class="food-image">
-							<img src="goodsImgs/1.jpg" />
-						</div>
-						<div><h4>回锅肉盖饭</h4></div>
-						<div class="food-number">已售17份</div>
-						<div class="food-pos">
-							<div class="food-add"><span class="glyphicon glyphicon-plus" style="color: gold;"></span></div>
-							<div class="food-cost">￥18元</div>
-						</div>
-					</div>
-					</div>
-				</li>
-				
-				
-				<li class="foods-li">
-					<div class="goods-info">
-					<div class="goods-inner-wrap">
-						<div class="food-image">
-							<img src="goodsImgs/1.jpg" />
-						</div>
-						<div><h4>回锅肉盖饭</h4></div>
-						<div class="food-number">已售17份</div>
-						<div class="food-pos">
-							<div class="food-add"><span class="glyphicon glyphicon-plus" style="color: gold;"></span></div>
-							<div class="food-cost">￥18元</div>
-						</div>
-					</div>
-					</div>
-				</li>
 			</ul>
 		</div>
 	</div>
+	<div class="modal" id="payModal">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title">收货信息</h4>
+				</div>
+				<div class="modal-body">
+					
+					<table class="table table-striped">
+						<tr>
+							<td>收货人</td><td>{{username}}</td>
+						</tr>
+						<tr>
+							<td>收货地址</td><td>{{address}}</td>
+						</tr>
+					</table>
+					
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>菜品</th><th>数量</th><th>价格</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="goods in cartGoods track by $index">
+								<td>{{goods.name}}</td>
+								<td>
+									<span ng-click="minusNumber($index)" class="glyphicon glyphicon-minus-sign" style="color: rgb(122, 121, 114); text-shadow: none"></span>
+									<span>{{goods.number}}</span>
+									<span ng-click="addNumber($index)" class="glyphicon glyphicon-plus" style="color: rgb(122, 121, 114); text-shadow: none"></span>
+								</td>
+								<td>{{goods.price * goods.number}}</td>
+								
+							</tr>
+							<tr>
+								<td>配送费(不计入起送价)</td>
+								<td></td>
+								<td>{{store.cost}}</td>
+							</tr>
+							<tr>
+								<td><span style="font-size: 28px;font-weight: 700;">合计</span></td>
+								<td><span style="color: #fe4d3d;font-size: 28px;font-weight: 700;">{{cartGoodsNumber}}</span>份</td>
+								<td><span style="color: #fe4d3d;font-size: 28px;font-weight: 700;">{{totalPrice}}</span>元</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">返回修改</button>
+					<button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="payNow()">立即支付</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
 	<div class="cart">
-		<span class="glyphicon glyphicon-shopping-cart" style="color: rgb(235, 186, 96);font-size: 36px">总金额：￥30</span>
+		<div class="cart-tips">
+			电脑下单，方便快捷~
+		</div>
+		<div class="cart-detail" ng-show="tableShow">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>菜品</th><th>数量</th><th>价格</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="goods in cartGoods track by $index">
+						<td>{{goods.name}}</td>
+						<td>
+							<span ng-click="minusNumber($index)" class="glyphicon glyphicon-minus-sign" style="color: rgb(122, 121, 114); text-shadow: none"></span>
+							<span>{{goods.number}}</span>
+							<span ng-click="addNumber($index)" class="glyphicon glyphicon-plus" style="color: rgb(122, 121, 114); text-shadow: none"></span>
+						</td>
+						<td>{{goods.price * goods.number}}</td>
+						
+					</tr>
+					<tr>
+						<td>配送费(不计入起送价)</td>
+						<td></td>
+						<td>{{store.cost}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="cart-info" ng-show="cartInfoShow">
+			<div class="cart-info-inner">
+				共<span style="color: #fe4d3d;">{{cartGoodsNumber}}</span>份,
+				总计<span style="color: #fe4d3d;font-size: 28px;font-weight: 700;">{{totalPrice}}</span>元
+			</div>
+		</div>
+		<div class="cart-cost">
+			<span class="glyphicon glyphicon-shopping-cart" style="color: rgb(235, 186, 96);font-size: 28px; padding-left: 10px;">
+			</span>
+			<button type="button" class="btn btn-success" style="float: right" ng-disabled="totalPrice < 300" ng-click="payForGoods()">去支付</button>
+		</div>
 	</div>
 	<div class="page-slice"></div>
 </div>

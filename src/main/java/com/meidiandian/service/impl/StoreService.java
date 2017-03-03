@@ -43,5 +43,11 @@ public class StoreService implements IStoreService{
 
 		return storeDao.findStoreByCity(city);
 	}
+
+	@Override
+	public Store selectStoreByID(int storeID) {
+
+		return storeDao.selectStoreByID(storeID);
+	}
 	
 }

@@ -61,4 +61,13 @@ public class GoodsDao implements IGoodsDao {
 		sqlSession.close();
 	}
 
+	@Override
+	public void addGoodsNum(Map<String, Integer> map) {
+		
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		sqlSession.update(Goods.class.getName() + ".addGoodsNum", map);
+		sqlSession.commit();
+		sqlSession.close();
+	}
+
 }

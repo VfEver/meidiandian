@@ -71,6 +71,39 @@ public class StoreController {
 	}
 	
 	/**
+	 * 根据店铺id查询店铺信息
+	 * @param storeID
+	 * @return
+	 */
+	@RequestMapping(value="/storemsg", method=RequestMethod.POST, produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String findStoreByStoreID(
+			@RequestParam(value = "storeID", defaultValue = "0") String storeID) {
+		
+		JSONObject json = new JSONObject();
+		
+		if (!StringUtils.isEmpty(storeID)) {
+			
+			int storeIDIng = Integer.parseInt(storeID);
+			Store store = storeService.selectStoreByID(storeIDIng);
+			
+			if (store != null) {
+				json.put("status", 200);
+				json.put("store", store);
+			} else {
+				json.put("status", -1);
+				json.put("reason", "店铺不存在");
+			}
+			
+		} else {
+			json.put("status", -1);
+			json.put("reason", "出现问题，请重试");
+		}
+		
+		return json.toString();
+	}
+	
+	/**
 	 * 保存新创建的店铺信息
 	 * @param id
 	 * @param storeName

@@ -8,6 +8,9 @@ public class Store {
 	private String storeHours;
 	private String storeAddress;
 	private double cost;
+	private int postTime;
+	private int beginPost;
+	private String storeNotice;
 	private String storeImage;
 	public int getId() {
 		return id;
@@ -44,6 +47,24 @@ public class Store {
 	}
 	public void setCost(double cost) {
 		this.cost = cost;
+	}
+	public int getPostTime() {
+		return postTime;
+	}
+	public void setPostTime(int postTime) {
+		this.postTime = postTime;
+	}
+	public int getBeginPost() {
+		return beginPost;
+	}
+	public void setBeginPost(int beginPost) {
+		this.beginPost = beginPost;
+	}
+	public String getStoreNotice() {
+		return storeNotice;
+	}
+	public void setStoreNotice(String storeNotice) {
+		this.storeNotice = storeNotice;
 	}
 	public String getStoreImage() {
 		return storeImage;

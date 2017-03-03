@@ -37,4 +37,11 @@ public interface IStoreService {
 	 * @return
 	 */
 	public List<Store> findStoreByCity(String city);
+	
+	/**
+	 * 根据店铺id查询店铺信息
+	 * @param storeID
+	 * @return
+	 */
+	public Store selectStoreByID (int storeID);
 }

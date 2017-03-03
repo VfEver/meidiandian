@@ -14,6 +14,7 @@ import net.sf.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -65,6 +66,7 @@ public class GoodsController {
 				temp.put("price", goods.getGoodsPrice());
 				temp.put("image", goods.getGoodsImage());
 				temp.put("name", goods.getGoodsName());
+				temp.put("soldNumber", goods.getSoldNumber());
 				array.add(temp);
 			}
 			
@@ -266,6 +268,36 @@ public class GoodsController {
 			json.put("status", -1);
 			json.put("reason", "网络问题，请重试");
 		}
+		return json.toString();
+	}
+	
+	/**
+	 * 订单完成后实现商品数量增加
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping(value="/addnum", method=RequestMethod.POST, produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String addGoodsNum(@RequestBody Map<String, String> map) {
+		
+		JSONObject json = new JSONObject();
+		
+		if (map != null && map.size() > 0) {
+			json.put("status", 200);
+			
+			Map<String, Integer> saveMap = null;
+			for (Map.Entry<String, String> entry : map.entrySet()) {
+				saveMap = new HashMap<String, Integer>();
+				saveMap.put("id", Integer.parseInt(entry.getKey()));
+				saveMap.put("number", Integer.parseInt(entry.getValue()));
+				goodsService.addGoodsNum(saveMap);
+			}
+			
+		} else {
+			json.put("status", -1);
+			json.put("reason", "出现问题，请稍等");
+		}
+		
 		return json.toString();
 	}
 }

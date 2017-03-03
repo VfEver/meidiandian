@@ -11,6 +11,7 @@ public class Goods {
 	private String goodsName;
 	private String goodsPrice;
 	private String goodsImage;
+	private int soldNumber;
 	
 	public int getId() {
 		return id;
@@ -41,6 +42,12 @@ public class Goods {
 	}
 	public void setGoodsImage(String goodsImage) {
 		this.goodsImage = goodsImage;
+	}
+	public int getSoldNumber() {
+		return soldNumber;
+	}
+	public void setSoldNumber(int soldNumber) {
+		this.soldNumber = soldNumber;
 	}
 	
 }

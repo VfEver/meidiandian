@@ -9,6 +9,9 @@
 		<result property="storeHours" column="store_hours"/>
 		<result property="storeAddress" column="store_address"/>
 		<result property="cost" column="cost"/>
+		<result property="postTime" column="post_time"/>
+		<result property="beginPost" column="begin_post"/>
+		<result property="storeNotice" column="store_notice"/>
 		<result property="storeImage" column="store_image"/>
 	</resultMap>
 	
@@ -55,4 +58,12 @@
 		from store
 		where store_address like #{city};
 	</select>
+	
+	<!-- 根据店铺id查询店铺信息 -->
+	<select id="selectStoreByID" parameterType="int" resultMap="storeMap">
+		select * 
+		from store
+		where store_id = #{id};
+	</select>
+	
 </mapper>

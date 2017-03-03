@@ -281,7 +281,6 @@ html, body {
     border: 1px solid #ebebeb;
     border-right: 0 none;
     background-color: #fff;
-    overflow: hidden;
 }
 .detail {
 	min-width: 330px;
@@ -290,6 +289,9 @@ html, body {
     left: 0;
     padding-right: 10px;
     overflow: hidden;
+}
+.store-info .detail:hover {
+	overflow: visible;
 }
 .store-image img {
 	margin-left: 20px;
@@ -300,8 +302,10 @@ html, body {
     float: left;
 }
 .store-detail {
-	margin-left: 5px;
-    float: left;
+	width: 250px;
+	height: 121px;
+	float: left;
+	margin-left: 10px;
 }
 .right-bar {
 	float: right;
@@ -309,6 +313,9 @@ html, body {
 .post-time, .begin-cost, .post-cost {
 	float: left;
 	margin: 30px;
+}
+.post-time:hover, .begin-cost:hover, .post-cost:hover {
+	background-color: #fffdf0;
 }
 .goods-detail {
 	width: 865px;
@@ -319,9 +326,12 @@ html, body {
 }
 .store-notice {
 	float: right;
-	width: 130px;
+	width: 136px;
 	background-color: #fff;
     border: 1px solid #ebebeb;
+}
+.store-notice:hover {
+	box-shadow: 1px 2px 2px #000000;
 }
 .store-left {
 	float: left;
@@ -375,10 +385,45 @@ html, body {
 .foods-li:hover {
 	background-color: #fffdf0;
 }
+
+/**
+	购物车样式
+*/
 .cart {
 	background-color: #fff;
 	position: fixed;
 	right: 200px;
-	bottom: 10px;
+	bottom: 0px;
 	float: right;
+	width: 240px;
+}
+.cart-tips {
+	height: 30px;
+	background-color: #fffdf0;
+	padding: 8px 0 0 8px;
+}
+.cart-detail {
+	background-color: #fff;
+}
+.cart-info {
+	margin-top: -20px;
+}
+.cart-info-inner {
+	float: right;
+}
+.cart-cost {
+    background-color: #fafafa;
+    cursor: pointer;
+	clear: both;
+}
+.cart-detail ul li {
+	list-style-type: none;
+}
+.u-flyer {
+	display: block;
+	width: 50px;
+	height: 50px;
+	border-radius: 50px;
+	position: fixed;
+	z-index: 9999;
 }

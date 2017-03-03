@@ -61,7 +61,6 @@
       <bean id="userDaoID" class="com.meidiandian.dao.impl.UserDao">
       	<property name="sqlSessionFactory" ref="sqlSessionFactoryBeanID"></property>
       </bean>
-      
       <bean id="userServiceID" class="com.meidiandian.service.impl.UserService">
       	<property name="userDao" ref="userDaoID"></property>
       </bean>
@@ -69,7 +68,6 @@
 	  <bean id="storeDaoID" class="com.meidiandian.dao.impl.StoreDao">
 	  	<property name="sqlSessionFactory" ref="sqlSessionFactoryBeanID"></property>
 	  </bean>
-	  
 	  <bean id="storeServiceID" class="com.meidiandian.service.impl.StoreService">
 	  	<property name="storeDao" ref="storeDaoID"></property>
 	  </bean>
@@ -79,6 +77,13 @@
 	  </bean>
 	  <bean id="goodsServiceID" class="com.meidiandian.service.impl.GoodsService">
 	  	<property name="goodsDao" ref="goodsDaoID"></property>
+	  </bean>
+	  
+	  <bean id="orderDaoID" class="com.meidiandian.dao.impl.OrderDao">
+	  	<property name="sqlSessionFactory" ref="sqlSessionFactoryBeanID"></property>
+	  </bean>
+	  <bean id="orderService" class="com.meidiandian.service.impl.OrderService">
+	  	<property name="orderDao" ref="orderDaoID"></property>
 	  </bean>
 	  
 </beans>
