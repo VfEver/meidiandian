@@ -7,10 +7,12 @@
 			  <li ng-show="type == 0" ng-click="changeToUserOrder()" id="userOrderID"><a href=""><h4>我的订单</h4></a></li>
 			  <li ng-show="type == 0" ng-click="changeToUserComment()" id="usercommentID"><a href=""><h4>我的评价</h4></a></li>
 			  <li ng-show="type == 1" ng-click="changeToStoreInfo()" id="stroeInfoID"><a href=""><h4>店铺管理</h4></a></li>
+			  <li ng-show="type == 1" ng-click="changeToOrderInfo()" id="orderInfoID"><a href=""><h4>订单管理</h4></a></li>
 			</ul>
 		</div>
 		<div class="right-side">
 		
+			<!-- 个人信息详情页 -->
 			<div class="userInfoDiv" ng-show="userInfoDiv">
 				<div>
 					<h3>个人信息</h3>
@@ -42,6 +44,38 @@
 				<button ng-click="updateUserInfo()" class="btn btn-default">更新信息</button> 
 			</div>
 			
+			<!-- 个人订单详情页 -->
+			<div class="personalOrderPage" ng-show="personalOrderPageShow">
+				<ul class="order-ul">
+					<li class="order-li" ng-repeat = "order in items" ng-click = "checkOrderDetail($index, order.orderID)">
+						<div class="order-info">
+							<div>下单时间:{{order.orderTime}}</div>
+							<div>收件人:{{order.username}}</div>
+							<div>收件地点:{{order.userAddress}}</div>
+						</div>
+					</li>
+				</ul>
+				
+				<nav>
+					<ul class="pagination">
+						<li>
+						<a ng-click="Previous()">
+							<span>上一页</span>
+						</a>
+						</li>
+						<li ng-repeat="page in pageList" ng-class="{active: isActivePage(page)}" >
+							<a ng-click="selectPage(page)" >{{ page }}</a>
+						</li>
+						<li>
+						<a ng-click="Next()">
+							<span>下一页</span>
+						</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+			
+			<!-- 创建店铺div -->
 			<div class="storeInfoDiv" ng-show="storeInfoDiv">
 				<div ng-show="createButton" style="margin:20px 0px 0px 10px">
 					<p>您还没有店铺，是否新建店铺？</p>
@@ -79,6 +113,7 @@
 				</div>
 			</div>
 			
+			<!-- 店铺信息详情页 -->
 			<div class="storeInfo" ng-show="storeInfo">
 				<div class="store-info">
 					<div>
@@ -118,6 +153,7 @@
 				</div>
 			</div>
 			
+			<!-- 店铺内商品信息 -->
 			<div class="goods-list" ng-show="goodsPage">
 				<div class="goods-head" style="margin:10px 0 5px 10px">
 					<span class="glyphicon glyphicon-arrow-left" ng-click="back()" style="cursor:pointer;"></span>
@@ -134,6 +170,7 @@
 				</ul>
 			</div>
 			
+			<!-- 商品详情modal -->
 			<div class="modal" id="goodsDetailModal">
 			    <div class="modal-dialog">
 			        <div class="modal-content">
@@ -170,6 +207,7 @@
 				</div><!-- /.modal-dialog -->
 			</div><!-- /.modal -->
 			
+			<!-- 添加商品的modal -->
 			<div class="modal" id="newGoodsModal">
 			    <div class="modal-dialog">
 			        <div class="modal-content">
@@ -204,6 +242,70 @@
 					</div><!-- /.modal-content -->
 				</div><!-- /.modal-dialog -->
 			</div><!-- /.modal -->
+			
+			
+			<!-- 店家的订单详情页 -->
+			<div class="order-page" ng-show="orderPageShow">
+				<ul class="order-ul">
+					<li class="order-li" ng-repeat = "order in items" ng-click = "checkOrderDetail($index, order.orderID)">
+						<div class="order-info">
+							<div>订单时间:{{order.orderTime}}</div>
+							<div>收件人:{{order.username}}</div>
+							<div>收件地点:{{order.userAddress}}</div>
+						</div>
+					</li>
+				</ul>
+				
+				<nav>
+					<ul class="pagination">
+						<li>
+						<a ng-click="Previous()">
+						<span>上一页</span>
+						</a>
+						</li>
+						<li ng-repeat="page in pageList" ng-class="{active: isActivePage(page)}" >
+						<a ng-click="selectPage(page)" >{{ page }}</a>
+						</li>
+						<li>
+						<a ng-click="Next()">
+						<span>下一页</span>
+						</a>
+						</li>
+					</ul>
+				</nav>
+				
+				
+				<div class="modal" id="orderModal">
+			    <div class="modal-dialog">
+			        <div class="modal-content">
+			            <div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+							<h4 class="modal-title">订单详情</h4>
+						</div>
+						<div class="modal-body">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th>商品名称</th><th>数量</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat = "goods in orderList">
+										<td>{{goods.goodsName}}</td>
+										<td>{{goods.goodsNumber}}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+							<button type="button" class="btn btn-primary" ng-click="postGoods()" data-dismiss="modal">发货</button>
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
+				
+			</div>
 			
 		</div>
 	</div>

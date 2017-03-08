@@ -14,7 +14,6 @@ import net.sf.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -278,24 +277,26 @@ public class GoodsController {
 	 */
 	@RequestMapping(value="/addnum", method=RequestMethod.POST, produces="text/html;charset=UTF-8")
 	@ResponseBody
-	public String addGoodsNum(@RequestBody Map<String, String> map) {
+	public String addGoodsNum(@RequestParam(value = "goodsData", defaultValue = "0") String goodsData) {
 		
 		JSONObject json = new JSONObject();
 		
-		if (map != null && map.size() > 0) {
+		if (!StringUtils.isEmpty(goodsData)) {
+			
 			json.put("status", 200);
 			
-			Map<String, Integer> saveMap = null;
-			for (Map.Entry<String, String> entry : map.entrySet()) {
-				saveMap = new HashMap<String, Integer>();
-				saveMap.put("id", Integer.parseInt(entry.getKey()));
-				saveMap.put("number", Integer.parseInt(entry.getValue()));
-				goodsService.addGoodsNum(saveMap);
+			String[] res = goodsData.split(";");
+			Map<String, Integer> map = null;
+			for (String string : res) {
+				map = new HashMap<String, Integer>();
+				int id = Integer.parseInt(string.split(",")[0]);
+				int num = Integer.parseInt(string.split(",")[1]);
+				map.put("id", id);
+				map.put("number", num);
+				goodsService.addGoodsNum(map);
 			}
-			
 		} else {
 			json.put("status", -1);
-			json.put("reason", "出现问题，请稍等");
 		}
 		
 		return json.toString();

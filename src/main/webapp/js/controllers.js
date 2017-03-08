@@ -89,6 +89,11 @@ angular.module('controllers', ['ngCookies'])
 		$location.path("goods");
 		$cookies.put("storeID", id);
 	}
+	
+	//返回前一页
+	$scope.back = function () {
+		$location.path("index");
+	}
 }])
 .controller('registerController', ['$scope', '$location', '$cookies', '$cookieStore', function($scope, $location, $cookies, $cookieStore) {
 	
@@ -142,16 +147,21 @@ angular.module('controllers', ['ngCookies'])
 				$cookies.remove("id");
 				$cookies.remove("username");
 				$cookies.remove("login");
+				$cookies.remove("storeID");
 				
 				$location.path("login");
 				$scope.$apply();
-				$scope.login = false;
 			}
 		});
 	}
 	
 }])
 .controller('goodsController', ['$scope', '$location', '$cookies', '$cookieStore', function($scope, $location, $cookies, $cookieStore) {
+	
+	//退回按钮
+	$scope.back = function () {
+		$location.path("store");
+	}
 	
 	//获取店铺商品信息
 	function getGoodsDetail() {
@@ -255,8 +265,7 @@ angular.module('controllers', ['ngCookies'])
 			--j;
 			$scope.cartGoods.splice(index, 1);
 		}
-		if (--$scope.cartGoodsNumber == 0) {
-			$scope.tableShow = false;
+		if (--$scope.cartGoodsNumber == 0) {			$scope.tableShow = false;
 			$scope.cartInfoShow = false;
 		}
 	} 
@@ -300,19 +309,22 @@ angular.module('controllers', ['ngCookies'])
 	//结账
 	$scope.payNow = function () {
 		
-		var obj = [];
-		for (var index in $scope.goodsList) {
-			var temp = {};
-			temp[$scope.goodsList[index].goodsID] = $scope.goodsList[index].number;
-			obj[index] = temp;
+		var obj = "";
+		for (var index in $scope.cartGoods) {
+			if (obj != "") {
+				obj += ";";
+			}
+			var temp = $scope.cartGoods[index].goodsID+","+$scope.cartGoods[index].number;
+			obj += temp;
 		}
 		
 		//增加商品出售数量
 		$.ajax({
 			url: '/meidiandian/goods/addnum.do',
-			data: JSON.stringify(obj),
-			contentType: 'application/json',
-			type: 'GET',
+			data: {
+				goodsData: obj
+			},
+			type: 'POST',
 		})
 		.then(function(data) {
 			var res = JSON.parse(data);
@@ -322,7 +334,60 @@ angular.module('controllers', ['ngCookies'])
 		});
 		
 		//保存订单信息
-		
+		$.ajax({
+			url: '/meidiandian/order/saveorder.do',
+			data: {
+				userID: $cookies.get("id"),
+				username: $scope.username,
+				userAddress: $scope.address,
+				totalCost: $scope.totalPrice,
+				storeID: $cookies.get("storeID"),
+				storeName: $scope.store.storeName
+			},
+			type: 'POST',
+		})
+		.then(function(data) {
+			var res = JSON.parse(data);
+			if(res.status != 200) {
+				alert("付款失败!请重试");
+				return;
+			}
+			
+			var goodsData = "";
+			for (var index in $scope.cartGoods) {
+				if (goodsData != "") {
+					goodsData += ";";
+				}
+				var temp = $scope.cartGoods[index].goodsID + "," +  $scope.cartGoods[index].name+ "," + $scope.cartGoods[index].number;
+				goodsData += temp;
+			}
+			
+			//初始化购物车所有条件
+			$scope.tableShow = false;
+			$scope.cartInfoShow = false;
+			$scope.cartGoods = [];
+			$scope.totalPrice = $scope.store.cost;
+			$scope.cartGoodsNumber = 0;
+			goodsIndex = [];
+			j = 0;
+			$scope.$apply();
+			
+			
+			$.ajax({
+				url: '/meidiandian/order/saveorderdetail.do',
+				data: {
+					orderID: res.orderID,
+					goodsData: goodsData
+				},
+				type: 'POST',
+			})
+			.then(function(data) {
+				var res = JSON.parse(data);
+				if(res.status != 200) {
+					alert("支付失败");
+				}
+			});
+		});
 	}
 	
 }])
@@ -354,6 +419,7 @@ angular.module('controllers', ['ngCookies'])
 		});
 	}
 	getUserInfo();
+	getUserStore();
 	
 	//获取店铺信息
 	function getStoreInfo () {
@@ -419,12 +485,30 @@ angular.module('controllers', ['ngCookies'])
 	
 	//点击进入用户信息界面
 	$scope.changeToUserInfo = function() {
+		
 		$("li").removeClass("active");
 		$("#userInfoID").addClass("active");
 		$scope.userInfoDiv = true;
 		$scope.goodsPage = false;
 		$scope.storeInfoDiv = false;
 		$scope.storeInfo = false;
+		$scope.orderPageShow = false;
+		$scope.personalOrderPageShow = false;
+	}
+	
+	//点击进入用户自己订单信息页面
+	$scope.changeToUserOrder = function () {
+		
+		$("li").removeClass("active");
+		$("#userOrderID").addClass("active");
+		$scope.userInfoDiv  = false;
+		$scope.storeInfoDiv = false;
+		$scope.storeInfo = false;
+		$scope.goodsPage = false;
+		$scope.orderPageShow = false;
+		$scope.personalOrderPageShow = true;
+		
+		getPersonOrder();
 	}
 	
 	//点击进入店铺界面
@@ -434,9 +518,51 @@ angular.module('controllers', ['ngCookies'])
 		$("#stroeInfoID").addClass("active");
 		$scope.userInfoDiv = false;
 		$scope.storeInfoDiv = false;
+		$scope.goodsPage = false;
 		$scope.storeInfo = true;
+		$scope.orderPageShow = false;
+		$scope.personalOrderPageShow = false;
 		
 		getStoreInfo();
+	}
+	
+	//点击进入个人订单详情页
+	$scope.changeToOrderInfo = function () {
+		
+		$("li").removeClass("active");
+		$("#orderInfoID").addClass("active");
+		$scope.userInfoDiv = false;
+		$scope.storeInfoDiv = false;
+		$scope.storeInfo = false;
+		$scope.orderPageShow = true;
+		$scope.personalOrderPageShow = false;
+		
+		getOrderDetail();
+	}
+	
+	//查询个人订单的详细信息
+	function getPersonOrder() {
+		
+		$.ajax({
+			url: '/meidiandian/order/userorder.do',
+			data: {
+				id: $cookies.get("id")
+			},
+			type: 'POST',
+		})
+		.then(function (data) {
+			var res = JSON.parse(data);
+			
+			if (res.status == 200) {
+				
+				$scope.orderDetail = res.orderDetail;
+				slicePage();
+				
+			} else {
+				alert(res.reason);
+			}
+		})
+		
 	}
 	
 	//创建店铺
@@ -698,9 +824,141 @@ angular.module('controllers', ['ngCookies'])
 		});
 	}
 	
+	//退回按钮
 	$scope.back = function () {
 		$scope.goodsPage = false;
 		$scope.storeInfo = true;
+	}
+	
+	//获得店铺内订单信息
+	function getOrderDetail () {
+		$.ajax({
+			url: '/meidiandian/order/findorderdetail.do',
+			data: {
+				storeID: $cookies.get("storeID"),
+			},
+			type: 'POST',
+		})
+		.then(function(data) {
+			var res = JSON.parse(data);
+			
+			if (res.status == 200) {
+				
+				$scope.orderDetail = res.orderDetail;
+				slicePage();
+			} else {
+				alert('出现问题，请重试');
+			}
+		});
+	}
+	
+	//查询用户店铺(只是将storeID放入cookies，防止点击订单cookies里面没有storeID)
+	function getUserStore() {
+		$.ajax({
+			url: '/meidiandian/store/storeinfo.do',
+			data: {
+				id: $cookies.get("id")
+			},
+			type: 'POST',
+		})
+		.then(function(data) {
+			var res = JSON.parse(data);
+			if(res.status == 200) {
+				if (res.hasStore === "yes") {
+					$cookies.put("storeID", res.storeID);
+				}
+			} else {
+				alert(res.reason);
+			}
+		});
+	}
+	
+	//点击查看详细订单
+	$scope.checkOrderDetail = function (index, orderID) {
+		
+		$("#orderModal").modal("toggle");
+		$scope.orderList = $scope.orderDetail[index].orderList;
+		$scope.curOrderID = orderID;
+	}
+	
+	//点击发货
+	$scope.postGoods = function () {
+		$.ajax({
+			url: '/meidiandian/order/updateorderstatus.do',
+			data: {
+				orderID: $scope.curOrderID
+			},
+			type: 'POST',
+		})
+		.then(function(data) {
+			var res = JSON.parse(data);
+			if(res.status == 200) {
+				alert("发货成功");
+			} else {
+				alert("出现问题，请重试");
+			}
+		});
+	}
+	
+	//分页函数
+	function slicePage() {
+		
+		//实现分页
+		$scope.pageSize = 5;
+		$scope.data = $scope.orderDetail;
+		$scope.pages = Math.ceil($scope.data.length / $scope.pageSize); //分页数
+		$scope.newPages = $scope.pages > 5 ? 5 : $scope.pages;
+		$scope.pageList = [];
+		$scope.selPage = 1;
+		
+		//设置表格数据源(分页)
+		$scope.setData = function () {
+			$scope.items = $scope.data.slice(($scope.pageSize * ($scope.selPage - 1)), ($scope.selPage * $scope.pageSize));//通过当前页数筛选出表格当前显示数据
+		}
+		$scope.items = $scope.data.slice(0, $scope.pageSize);
+		
+		//分页要repeat的数组
+		for (var i = 0; i < $scope.newPages; i++) {
+			$scope.pageList.push(i + 1);
+		}
+		
+		//打印当前选中页索引
+		$scope.selectPage = function (page) {
+			//不能小于1大于最大
+			if (page < 1 || page > $scope.pages) 
+				return;
+			//最多显示分页数5
+			if (page > 2) {
+			//因为只显示5个页数，大于2页开始分页转换
+				var newpageList = [];
+				for (var i = (page - 3) ; i < ((page + 2) > $scope.pages ? $scope.pages : (page + 2)) ; i++) {
+					newpageList.push(i + 1);
+				}
+				$scope.pageList = newpageList;
+			}
+			$scope.selPage = page;
+			$scope.setData();
+			$scope.isActivePage(page);
+			console.log("选择的页：" + page);
+		};
+		
+		//设置当前选中页样式
+		$scope.isActivePage = function (page) {
+			return $scope.selPage == page;
+		};
+		
+		//上一页
+		$scope.Previous = function () {
+			$scope.selectPage($scope.selPage - 1);
+		}
+		
+		//下一页
+		$scope.Next = function () {
+			$scope.selectPage($scope.selPage + 1);
+		}
+		
+		$scope.$apply();
+		
 	}
 	
 }]);

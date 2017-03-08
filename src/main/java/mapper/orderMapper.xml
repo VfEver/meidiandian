@@ -9,13 +9,56 @@
 		<result property="userAddress" column="user_address"/>
 		<result property="orderTime" column="order_time"/>
 		<result property="totalCost" column="total_cost"/>
+		<result property="storeID" column="store_id"/>
+		<result property="storeName" column="store_name"/>
 		<result property="payStatus" column="pay_status"/>
 	</resultMap>
 	
 	<!-- 保存生成的订单 -->
 	<insert id="saveOrder" parameterType="order">
-		insert into order (order_id, user_id, user_name, user_address, order_time, total_cost, pay_status)
-		values(#{orderID},#{userID},#{username},#{userAddress},#{orderTime},#{totalCost},#{payStatus});
+		insert into order_t (order_id, user_id, user_name, user_address, order_time, total_cost, pay_status, store_id, store_name)
+		values(#{orderID},#{userID},#{username},#{userAddress},#{orderTime},#{totalCost},#{payStatus}, #{storeID}, #{storeName});
 	</insert>
 	
+	<!-- 保存此订单中各个商品的详细信息 -->
+	<insert id="saveOrderDetail" parameterType="map">
+		insert into order_detail(order_id, goods_id, goods_number, goods_name)
+		values(#{orderID}, #{goodsID}, #{goodsNumber}, #{goodsName});
+	</insert>
+	
+	<!-- 查询订单的详细信息 -->
+	<select id="findOrderDetail" parameterType="int" resultType="java.util.HashMap">
+		select o.order_id as orderID,
+				o.user_name as username,
+				o.user_address as userAddress,
+				o.order_time as orderTime,
+				o.total_cost as totalCost,
+				d.goods_name as goodsName,
+				d.goods_number as goodsNumber
+		from order_t as o left join order_detail as d
+		on o.order_id = d.order_id
+		where store_id = #{id};
+	</select>
+	
+	<!-- 更新订单的配送状态 -->
+	<update id="updateOrderStatus" parameterType="map">
+		update order_t
+		set post_status = #{status}
+		where order_id = #{orderID};
+	</update>
+	
+	<!-- 查询用户自己的订单 -->
+	<select id="findUserOrder" parameterType="int" resultType="java.util.HashMap">
+		select o.order_id as orderID,
+			o.order_time as orderTime,
+			o.user_name as username,
+			o.user_address as userAddress,
+			o.total_cost as totalCost,
+			o.store_name as storeName,
+			d.goods_number as goodsNumber,
+			d.goods_name as goodsName
+		from order_t as o left join order_detail as d
+		on o.order_id = d.order_id
+		where user_id = #{id};
+	</select>
 </mapper>

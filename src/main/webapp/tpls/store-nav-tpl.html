@@ -2,8 +2,8 @@
 	<div class="goods-nav">
 		<div class="logo"><a href="#index"><img alt="logo" src="images/logo.png" /></a></div>
 	</div>
-	<div class="search-div input-group">
-		<input type="text" class="form-control input-lg" placeholder="搜索商家、美食"><span class="input-group-addon glyphicon glyphicon-search"></span>
+	<div class="search-div input-group" ng-controller="storeController">
+		<input ng-model="city" type="text" class="form-control input-lg" placeholder="搜索商家、美食"><span class="input-group-addon glyphicon glyphicon-search" ng-click="searchStore()"></span>
 	</div>
 	<div class="operateLabel" ng-controller="loginController">
 		<div ng-controller="registerController" class="operate-link">

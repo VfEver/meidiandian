@@ -15,6 +15,8 @@ public class Order {
 	private String userAddress;
 	private Date orderTime;
 	private double totalCost;
+	private int storeID;
+	private String storeName;
 	private int payStatus;	//订单支付状态：1已经支付，0未支付
 	
 	public String getOrderID() {
@@ -52,6 +54,18 @@ public class Order {
 	}
 	public void setTotalCost(double totalCost) {
 		this.totalCost = totalCost;
+	}
+	public int getStoreID() {
+		return storeID;
+	}
+	public void setStoreID(int storeID) {
+		this.storeID = storeID;
+	}
+	public String getStoreName() {
+		return storeName;
+	}
+	public void setStoreName(String storeName) {
+		this.storeName = storeName;
 	}
 	public int getPayStatus() {
 		return payStatus;
