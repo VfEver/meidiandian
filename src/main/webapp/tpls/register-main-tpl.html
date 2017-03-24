@@ -6,16 +6,22 @@
 		<form name="registerForm">
 			<div class="form-group has-feedback">  
                  <span class="glyphicon glyphicon-user"></span>
-                 <label for="account" style="color: gray;">账号</label>  
-                 <input ng-model="account"  
+                 <label for="account" style="color: gray;">账号</label> 
+                 <br /> 
+                 <input
+                 	ng-model="account"  
                  	ng-minlength="6"
                  	ng-maxlength="20"
                  	maxlength="20" 
                  	type="text" 
-                 	class="form-control" 
+                 	class="form-control accountInput" 
                  	name="account" 
-                 	placeholder="账号" 
-                 	autofocus />  
+                 	placeholder="账   号" 
+                 	autofocus />
+                 	<p style="font-size:15px;color:red" 
+					ng-if="registerForm.account.$error.minlength && registerForm.account.$touched">
+					账号长度在6~20之间</p>
+                 	<p ng-show="accountUsed" style="color:red; font-size: 15px;">此账号已经被注册</p>
           	</div>
             <div class="form-group has-feedback">
                 <span class="glyphicon glyphicon-lock"></span>
@@ -26,9 +32,11 @@
                  	ng-maxlength="20"
                 	maxlength="20" 
                 	type="password" 
-                	class="form-control" 
+                	class="form-control passwordInput" 
                 	name="password" 
-                	placeholder="密   码" />  
+                	placeholder="密   码" /> 
+                <p style="font-size:15px;color:red"
+				ng-if="registerForm.password.$error.minlength && registerForm.password.$touched">密码长度在6~20之间</p>
             </div>
             
             <div class="form-group has-feedback">
@@ -38,24 +46,20 @@
                 <input ng-model="comfirmPassword" 
                 	maxlength="20" 
                 	type="password"
-                	class="form-control" 
+                	class="form-control confirmPasswordInput" 
                 	name="confirmPassword" 
-                	placeholder="密   码" />  
+                	placeholder="密   码" />
+                <p ng-show="comfirmPasswordInvalidate" style="color:red; font-size: 15px;">两次密码不一致</p>
             </div>
             <div>
 				<input type="checkbox" value="seller" ng-model="isSeller"/><span style="font-size:15px;color:#999">商家注册</span>
 			</div>
 		</form>
 		<div>
-			<p style="font-size:15px;color:red" 
-			ng-if="registerForm.account.$error.minlength && registerForm.account.$touched">
-			账号长度在6~20之间</p>
-			<p style="font-size:15px;color:red"
-			ng-if="registerForm.password.$error.minlength && registerForm.password.$touched">密码长度在6~20之间</p>
 		</div>
 		<br/>
 		<div>
-			<button type="button" class="btn btn-default btn-lg" ng-click="register()">注册</button>
+			<button type="button" class="btn btn-default btn-lg" ng-click="register()" ng-disabled="accountInvalidate || accountUsed || passwordInvalidate || comfirmPasswordInvalidate">注册</button>
 		</div>
 		<br/>
 		<div>

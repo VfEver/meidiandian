@@ -38,4 +38,11 @@ public interface IUserService {
 	 * @param map
 	 */
 	public void updateUserInfo(Map<String, String> map);
+	
+	/**
+	 * 根据account查询用户
+	 * @param account
+	 * @return
+	 */
+	public User findUserByAccount(String account);
 }

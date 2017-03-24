@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+	<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="recommend">
+	
+	<!-- 查询出用户和商品关系 -->
+	<select id="findItemUser" resultType="java.util.HashMap">
+		select c.score as score,
+			c.comment_time as time,
+			a.user_id as userID,
+			a.store_id as storeID,
+			a.goods_id as goodsID
+		from order_comment c right join
+			(
+				select t.order_id, t.user_id, t.store_id, d.goods_id
+				from order_t t left join order_detail d
+				on t.order_id = d.order_id
+			) a
+		on c.order_id = a.order_id
+	</select>
+	
+</mapper>

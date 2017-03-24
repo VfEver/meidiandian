@@ -47,7 +47,7 @@
 			<!-- 个人订单详情页 -->
 			<div class="personalOrderPage" ng-show="personalOrderPageShow">
 				<ul class="order-ul">
-					<li class="order-li" ng-repeat = "order in items" ng-click = "checkOrderDetail($index, order.orderID)">
+					<li class="order-li" ng-repeat = "order in items" ng-click = "checkPersonOrderDetail($index, order.orderID)">
 						<div class="order-info">
 							<div>下单时间:{{order.orderTime}}</div>
 							<div>收件人:{{order.username}}</div>
@@ -73,6 +73,75 @@
 						</li>
 					</ul>
 				</nav>
+				
+				<!-- 点击订单出现详情，然后用户可以评价（星级和文字） -->
+				<div class="modal" id="personOrderModal">
+			    <div class="modal-dialog">
+			        <div class="modal-content">
+			            <div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+							<h4 class="modal-title">订单详情</h4>
+						</div>
+						<div class="modal-body">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th>商品名称</th><th>数量</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat = "goods in orderList">
+										<td>{{goods.goodsName}}</td>
+										<td>{{goods.goodsNumber}}</td>
+									</tr>
+								</tbody>
+							</table>
+							<div>
+								<input ng-model="ratingValue" id="rating-id" type="number" class="rating" min=0 max=5 step=0.5 data-size="sm" >
+								<input ng-model="ratingText" type="text" class="form-control" id="ratingText" placeholder="输入您对此订单的评价" maxlength="50">
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+							<button type="button" class="btn btn-primary" ng-click="saveComment()" data-dismiss="modal">发表评价</button>
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+				</div><!-- /.modal -->
+				
+			</div>
+			
+			<!-- 用户已经评价的订单信息 -->
+			<div class="commentOrder" ng-show="commentOrderShow">
+				<div>
+					<ul class="order-ul">
+					<li class="order-li" ng-repeat = "order in items">
+						<div class="order-info">
+							<div>评价时间:{{order.commentTime}}</div>
+							<div>评分:{{order.score}}</div>
+							<div>内容:{{order.comment}}</div>
+						</div>
+					</li>
+					</ul>
+					
+					<nav>
+						<ul class="pagination">
+							<li>
+							<a ng-click="Previous()">
+								<span>上一页</span>
+							</a>
+							</li>
+							<li ng-repeat="page in pageList" ng-class="{active: isActivePage(page)}" >
+								<a ng-click="selectPage(page)" >{{ page }}</a>
+							</li>
+							<li>
+							<a ng-click="Next()">
+								<span>下一页</span>
+							</a>
+							</li>
+						</ul>
+					</nav>
+				</div>
 			</div>
 			
 			<!-- 创建店铺div -->

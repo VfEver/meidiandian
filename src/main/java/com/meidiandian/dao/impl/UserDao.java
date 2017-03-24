@@ -60,4 +60,13 @@ public class UserDao implements IUserDao {
 		sqlSession.commit();
 		sqlSession.close();
 	}
+	@Override
+	public User findUserByAccount(String account) {
+
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		User user = sqlSession.selectOne(User.class.getName() + ".findUserByAccount", account);
+		sqlSession.close();
+		
+		return user;
+	}
 }

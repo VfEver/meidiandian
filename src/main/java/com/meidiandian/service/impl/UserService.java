@@ -36,5 +36,10 @@ public class UserService implements IUserService{
 		
 		userDao.updateUserInfo(map);
 	}
+	@Override
+	public User findUserByAccount(String account) {
+
+		return userDao.findUserByAccount(account);
+	}
 	
 }

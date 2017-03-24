@@ -86,4 +86,17 @@
 	  	<property name="orderDao" ref="orderDaoID"></property>
 	  </bean>
 	  
+	  <bean id="orderCommentDaoID" class="com.meidiandian.dao.impl.OrderCommentDao">
+	  	<property name="sqlSessionFactory" ref="sqlSessionFactoryBeanID"></property>
+	  </bean>
+	  <bean id="orderCommentServiceID" class="com.meidiandian.service.impl.OrderCommentService">
+	  	<property name="orderCommentDao" ref="orderCommentDaoID"></property>
+	  </bean>
+	  
+	  <bean id="recommendDaoID" class="com.meidiandian.dao.impl.RecommendDao">
+	  	<property name="sqlSessionFactory" ref="sqlSessionFactoryBeanID"></property>
+	  </bean>
+	  <bean id="recommendServiceID" class="com.meidiandian.service.impl.RecommendService">
+	  	<property name="recommendDao" ref="recommendDaoID"></property>
+	  </bean>
 </beans>

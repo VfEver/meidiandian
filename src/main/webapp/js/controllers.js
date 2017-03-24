@@ -57,14 +57,48 @@ angular.module('controllers', ['ngCookies'])
 	
 	//点击搜索按钮响应跳转和查询
 	$scope.searchStore = function () {
+		
+		if ($scope.city === undefined || $scope.city.trim().length <= 0) {
+			alert("请输入城市名称");
+			return ;
+		}
+		
 		$cookies.put("city", $scope.city);
 		$location.path("store");
 	}
-
+	
 	searchStores();
+	recommendGoods();
+
+	//导航搜索
+	$scope.navSearch = function () {
+		if ($scope.navCity === undefined || $scope.navCity.trim().length <= 0) {
+			alert("请输入城市名称");
+			return ;
+		}
+		$.ajax({
+			url: '/meidiandian/store/findstore.do',
+			data: {
+				city: $scope.navCity.trim()
+			},
+			type: 'GET',
+		})
+		.then(function(data) {
+			var res = JSON.parse(data);
+			
+			if (res.status == 200) {
+				$scope.$apply(function () {
+					$scope.storeList = res.storeList;
+				});
+			} else {
+				alert("出现问题，请重试！");
+			}
+		})
+	}
 	
 	//查询相应城市的商铺
 	function searchStores() {
+		
 		$.ajax({
 			url: '/meidiandian/store/findstore.do',
 			data: {
@@ -84,6 +118,26 @@ angular.module('controllers', ['ngCookies'])
 		})
 	}
 	
+	//给出当前用户推荐商品
+	function recommendGoods() {
+		$.ajax({
+			url: '/meidiandian/recommend/recommendgoods.do',
+			data: {
+				id: $cookies.get("id")
+			},
+			type: 'GET',
+		})
+		.then(function(data) {
+			var res = JSON.parse(data);
+			
+			if (res.status == 200) {
+				
+			} else {
+				
+			}
+		})
+	}
+	
 	//查询店铺商品信息
 	$scope.checkDetail = function (id) {
 		$location.path("goods");
@@ -97,9 +151,114 @@ angular.module('controllers', ['ngCookies'])
 }])
 .controller('registerController', ['$scope', '$location', '$cookies', '$cookieStore', function($scope, $location, $cookies, $cookieStore) {
 	
+	//注册表单账户合法变量，默认合法
+	$scope.accountInvalidate = false;
+	
+	//账号是否已经被注册,默认未被注册
+	$scope.accountUsed = false;
+	
+	//验证账号
+	$('.accountInput').on('blur', function() {
+		if ($scope.account === undefined || $scope.account.trim() === '') {
+			return ;
+		}
+		
+		if ($scope.account.trim().length < 6 || $scope.account.trim().length > 20) {
+			$scope.$apply(function () {
+				$scope.accountInvalidate  = true;
+				$scope.accountUsed = false;
+			});
+			return ;
+		} else {
+			$scope.$apply(function () {
+				$scope.accountInvalidate  = false;
+			});
+		}
+		
+		//账号是否已经存在验证
+		$.ajax({
+			url: '/meidiandian/user/accountexist.do',
+			data: {
+				account: $scope.account
+			},
+			type: 'POST',
+		})
+		.then(function(data) {
+			var res = JSON.parse(data);
+			
+			if (res.status == 200) {
+				if (res.exist === 1) {
+					$scope.$apply(function () {
+						$scope.accountUsed = false;
+					});
+				} else {
+					$scope.$apply(function () {
+						$scope.accountUsed = true;
+					});
+				}
+			} else {
+				alert("出现问题，请重试");
+			}
+			
+		});
+	});
+	
+	//密码合法情况，默认合法
+	$scope.passwordInvalidate = false;
+	//验证密码
+	$('.passwordInput').on('blur', function () {
+		
+		if ($scope.password == undefined) {
+			$scope.$apply(function () {
+				$scope.passwordInvalidate  = true;
+			});
+		} else {
+			
+			if ($scope.password.trim().length < 6 || $scope.password.trim().length > 20) {
+				$scope.$apply(function () {
+					$scope.passwordInvalidate  = true;
+				});
+			} else {
+				$scope.$apply(function () {
+					$scope.passwordInvalidate  = false;
+				});
+			}
+		}
+		
+	});
+	
+	//两次密码是否一致
+	$scope.comfirmPasswordInvalidate = false;
+	
+	//密码和确认密码是否一致
+	$('.confirmPasswordInput').on('change', function () {
+		
+		if ($scope.comfirmPassword == undefined) {
+			$scope.$apply(function () {
+				$scope.comfirmPasswordInvalidate = true;
+			});
+		}
+		
+		if ($scope.password === $scope.comfirmPassword) {
+			$scope.$apply(function () {
+				$scope.comfirmPasswordInvalidate = false;
+			});
+		} else {
+			$scope.$apply(function () {
+				$scope.comfirmPasswordInvalidate = true;
+			});
+		}
+	});
+	
+	
 	$scope.login = false;
 	//注册
 	$scope.register = function () {
+		
+		if($scope.comfirmPassword === undefined || $scope.comfirmPassword.trim().length <= 0) {
+			alert("请填写确认密码！");
+			return ;
+		}
 		$.ajax({
 			url: '/meidiandian/user/register.do',
 			data: {
@@ -494,6 +653,7 @@ angular.module('controllers', ['ngCookies'])
 		$scope.storeInfo = false;
 		$scope.orderPageShow = false;
 		$scope.personalOrderPageShow = false;
+		$scope.commentOrderShow = false;
 	}
 	
 	//点击进入用户自己订单信息页面
@@ -507,8 +667,23 @@ angular.module('controllers', ['ngCookies'])
 		$scope.goodsPage = false;
 		$scope.orderPageShow = false;
 		$scope.personalOrderPageShow = true;
-		
+		$scope.commentOrderShow = false;
 		getPersonOrder();
+	}
+	
+	//点击进入个人已经评价的订单页面
+	$scope.changeToUserComment = function () {
+		$("li").removeClass("active");
+		$("#usercommentID").addClass("active");
+		$scope.userInfoDiv  = false;
+		$scope.storeInfoDiv = false;
+		$scope.storeInfo = false;
+		$scope.goodsPage = false;
+		$scope.orderPageShow = false;
+		$scope.personalOrderPageShow = false;
+		$scope.commentOrderShow = true;
+		
+		getCommentOrder();
 	}
 	
 	//点击进入店铺界面
@@ -516,21 +691,24 @@ angular.module('controllers', ['ngCookies'])
 		
 		$("li").removeClass("active");
 		$("#stroeInfoID").addClass("active");
+		
 		$scope.userInfoDiv = false;
 		$scope.storeInfoDiv = false;
 		$scope.goodsPage = false;
 		$scope.storeInfo = true;
 		$scope.orderPageShow = false;
 		$scope.personalOrderPageShow = false;
+		$scope.commentOrderShow = false;
 		
 		getStoreInfo();
 	}
 	
-	//点击进入个人订单详情页
+	//点击进入店铺订单详情页
 	$scope.changeToOrderInfo = function () {
 		
 		$("li").removeClass("active");
 		$("#orderInfoID").addClass("active");
+		
 		$scope.userInfoDiv = false;
 		$scope.storeInfoDiv = false;
 		$scope.storeInfo = false;
@@ -538,6 +716,30 @@ angular.module('controllers', ['ngCookies'])
 		$scope.personalOrderPageShow = false;
 		
 		getOrderDetail();
+	}
+	
+	//查询出个人已经评价过的订单
+	function getCommentOrder() {
+		
+		$.ajax({
+			url: '/meidiandian/ordercomment/findcommentorder.do',
+			data: {
+				userID: $cookies.get("id")
+			},
+			type: 'POST',
+		})
+		.then(function (data) {
+			var res = JSON.parse(data);
+			
+			if (res.status == 200) {
+				
+				$scope.orderDetail = res.orderDetail;
+				slicePage();
+				
+			} else {
+				alert(res.reason);
+			}
+		})
 	}
 	
 	//查询个人订单的详细信息
@@ -873,6 +1075,40 @@ angular.module('controllers', ['ngCookies'])
 		});
 	}
 	
+	//点击查看个人详细订单
+	$scope.checkPersonOrderDetail = function (index, orderID) {
+		
+		$("#personOrderModal").modal("toggle");
+		$scope.orderList = $scope.orderDetail[index].orderList;
+		$scope.curOrderID = orderID;
+		$("#rating-id").rating();
+	}
+	
+	//点击发表评论
+	$scope.saveComment = function () {
+		$.ajax({
+			url: '/meidiandian/ordercomment/saveordercomment.do',
+			data: {
+				userID: $cookies.get("id"),
+				username: $scope.username,
+				score: $scope.ratingValue,
+				comment: $scope.ratingText,
+				orderID: $scope.curOrderID
+			},
+			type: 'POST',
+		})
+		.then(function(data) {
+			var res = JSON.parse(data);
+			if(res.status == 200) {
+				alert("评论成功");
+				getPersonOrder();
+				$scope.$apply();
+			} else {
+				alert(res.reason);
+			}
+		});
+	}
+	
 	//点击查看详细订单
 	$scope.checkOrderDetail = function (index, orderID) {
 		
@@ -939,7 +1175,6 @@ angular.module('controllers', ['ngCookies'])
 			$scope.selPage = page;
 			$scope.setData();
 			$scope.isActivePage(page);
-			console.log("选择的页：" + page);
 		};
 		
 		//设置当前选中页样式

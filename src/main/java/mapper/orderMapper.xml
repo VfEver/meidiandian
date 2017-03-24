@@ -47,7 +47,7 @@
 		where order_id = #{orderID};
 	</update>
 	
-	<!-- 查询用户自己的订单 -->
+	<!-- 查询用户自己的订单(未评价) -->
 	<select id="findUserOrder" parameterType="int" resultType="java.util.HashMap">
 		select o.order_id as orderID,
 			o.order_time as orderTime,
@@ -59,6 +59,6 @@
 			d.goods_name as goodsName
 		from order_t as o left join order_detail as d
 		on o.order_id = d.order_id
-		where user_id = #{id};
+		where user_id = #{id} and o.comment_status = 0;
 	</select>
 </mapper>

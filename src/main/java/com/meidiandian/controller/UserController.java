@@ -225,4 +225,32 @@ public class UserController {
 		
 		return json.toString();
 	}
+	
+	/**
+	 * 判断账号是否存在
+	 * @param account
+	 * @return
+	 */
+	@RequestMapping(value="/accountexist.do", method=RequestMethod.POST, produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String accountExist(@RequestParam(value = "account", defaultValue = "") String account) {
+		
+		JSONObject json = new JSONObject();
+		
+		if (!StringUtils.isEmpty(account)) {
+			json.put("status", 200);
+			
+			User user = userService.findUserByAccount(account);
+			
+			if (user == null) {//不存在
+				json.put("exist", 1);
+			} else {//存在
+				json.put("exist", 0);
+			}
+		} else {
+			json.put("status", -1);
+		}
+		
+		return json.toString();
+	}
 }

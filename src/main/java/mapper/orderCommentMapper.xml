@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+	<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.meidiandian.entity.OrderComment">
+	<resultMap type="orderComment" id="orderCommentMap">
+		<result property="orderID" column="order_id"/>
+		<result property="userID" column="user_id"/>
+		<result property="username" column="user_name"/>
+		<result property="comment" column="order_comment"/>
+		<result property="commentTime" column="comment_time"/>
+		<result property="score" column="score"/>
+	</resultMap>
+	
+	<!-- 保存评论信息 -->
+	<insert id="saveOrderComment" parameterType="orderComment">
+		insert into order_comment(order_id, user_id, user_name, order_comment, comment_time, score)
+		values(#{orderID}, #{userID}, #{username}, #{comment}, #{commentTime}, #{score});
+	</insert>
+	
+	<!-- 更新订单的评价状态 -->
+	<update id="updateOrderCommentStatus" parameterType="map">
+		update order_t
+		set comment_status = #{status}
+		where order_id = #{orderID}
+	</update>
+	
+	<!-- 根据用户id查询评论过的订单信息 -->
+	<select id="findCommentOrder" parameterType="int" resultMap="orderCommentMap">
+		select * 
+		from order_comment
+		where user_id=#{id};
+	</select>
+</mapper>

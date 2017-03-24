@@ -11,26 +11,31 @@
 		<result property="type" column="user_type"/>		
 		<result property="createTime" column="createTime"/>
 	</resultMap>
+	
 	<!-- 保存用户 -->
 	<insert id="saveUser" parameterType="user">
 		insert into user(user_account, user_password, user_name, user_address, user_type, createTime)
 		values (#{account}, #{password}, #{account}, #{address}, #{type}, #{createTime});
 	</insert>
+	
 	<!-- 根据账号和密码查找用户 -->
 	<select id="findUser" parameterType="map" resultMap="userMap">
 		select * from user
 		where user_account = #{account} and user_password = #{password};
 	</select>
+	
 	<!-- 查询新注册用户的id -->
 	<select id="findMaxID" resultType="int">
 		select max(user_id) from user;
 	</select>
+	
 	<!-- 根据id查询用户信息 -->
 	<select id="findUserByID" parameterType="int" resultMap="userMap">
 		select * 
 		from user
 		where user_id = #{id}
 	</select>
+	
 	<!-- 根据id更新用户信息 -->
 	<update id="updateUserInfo" parameterType="map">
 		update user
@@ -47,4 +52,11 @@
 		user_account = #{account}
 		where user_id=#{id}
 	</update>
+	
+	<!-- 根据账号account查询用户 -->
+	<select id="findUserByAccount" parameterType="string" resultMap="userMap">
+		select * 
+		from user
+		where user_account=#{account}
+	</select>
 </mapper>

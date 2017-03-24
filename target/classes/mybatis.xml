@@ -8,5 +8,6 @@
 		<typeAlias type="com.meidiandian.entity.Store" alias="store"/>
 		<typeAlias type="com.meidiandian.entity.Goods" alias="goods"/>
 		<typeAlias type="com.meidiandian.entity.Order" alias="order"/>
+		<typeAlias type="com.meidiandian.entity.OrderComment" alias="orderComment"/>
 	</typeAliases>
 </configuration>
