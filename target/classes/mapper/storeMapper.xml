@@ -21,8 +21,8 @@
 		where user_id=#{id}
 	</select>
 	<insert id="saveStore" parameterType="store">
-		insert into store(user_id, store_name, store_hours, store_address, cost) 
-		values (#{userID}, #{storeName}, #{storeHours}, #{storeAddress}, #{cost});
+		insert into store(user_id, store_name, store_hours, store_address, cost, post_time, begin_post) 
+		values (#{userID}, #{storeName}, #{storeHours}, #{storeAddress}, #{cost}, #{postTime}, #{beginPost});
 	</insert>
 	
 	<!-- 更新店铺信息 -->
@@ -40,6 +40,15 @@
 		</if>
 		<if test="cost != null and cost != ''">
 			cost = #{cost},
+		</if>
+		<if test="beginPost != null and beginPost != ''">
+			begin_post = #{beginPost},
+		</if>
+		<if test="postTime != null and postTime != ''">
+			post_time = #{postTime},
+		</if>
+		<if test="storeNotice != null and storeNotice != ''">
+			store_notice = #{storeNotice},
 		</if>
 		user_id = #{userID}
 		where store_id = #{id}

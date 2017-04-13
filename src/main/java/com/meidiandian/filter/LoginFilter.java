@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import com.meidiandian.util.StringUtils;
 
-public class LoginFilter implements Filter{
+public class LoginFilter implements Filter {
 
 	@Override
 	public void destroy() {
@@ -23,25 +23,22 @@ public class LoginFilter implements Filter{
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp,
 			FilterChain chain) throws IOException, ServletException {
-		
-		
+
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
-		
+
 		HttpSession session = request.getSession(true);
-		
+
 		String id = String.valueOf(session.getAttribute("id"));
 		String url = request.getRequestURI();
-		//忽略登录注册退出
-		if (url.contains("login") || 
-				!url.contains(".do") || 
-				url.contains("register") || 
-				url.contains("logout")) {
+		// 忽略登录注册退出
+		if (url.contains("login") || !url.contains(".do")
+				|| url.contains("register") || url.contains("logout")) {
 			chain.doFilter(request, response);
-			return ;
+			return;
 		}
 		if (StringUtils.isEmpty(id)) {
-			response.sendRedirect(request.getContextPath()+"/#login");
+			response.sendRedirect(request.getContextPath() + "/#login");
 		} else {
 			chain.doFilter(request, response);
 		}

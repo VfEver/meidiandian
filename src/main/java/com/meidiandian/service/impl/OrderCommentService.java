@@ -10,13 +10,14 @@ import com.meidiandian.service.IOrderCommentService;
 public class OrderCommentService implements IOrderCommentService {
 
 	private IOrderCommentDao orderCommentDao;
+
 	public void setOrderCommentDao(IOrderCommentDao orderCommentDao) {
 		this.orderCommentDao = orderCommentDao;
 	}
-	
+
 	@Override
 	public void saveOrderComment(OrderComment orderComment) {
-		
+
 		orderCommentDao.saveOrderComment(orderComment);
 	}
 

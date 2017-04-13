@@ -22,18 +22,20 @@ import com.meidiandian.util.StringUtils;
 
 /**
  * 订单评论控制层
+ * 
  * @author zys
  *
  */
 @Controller
 @RequestMapping("/ordercomment")
 public class OrderCommentController {
-	
+
 	@Autowired
 	private IOrderCommentService orderCommentService;
-	
+
 	/**
 	 * 保存用户对订单的评价
+	 * 
 	 * @param userID
 	 * @param username
 	 * @param orderID
@@ -42,7 +44,7 @@ public class OrderCommentController {
 	 * @param comment
 	 * @return
 	 */
-	@RequestMapping(value="/saveordercomment", method=RequestMethod.POST, produces="text/html;charset=UTF-8")
+	@RequestMapping(value = "/saveordercomment", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ResponseBody
 	public String saveOrder(
 			@RequestParam(value = "userID") String userID,
@@ -50,14 +52,14 @@ public class OrderCommentController {
 			@RequestParam(value = "orderID", defaultValue = "0") String orderID,
 			@RequestParam(value = "score", defaultValue = "0") String score,
 			@RequestParam(value = "comment", defaultValue = "0") String comment) {
-		
+
 		JSONObject json = new JSONObject();
-		
+
 		if (!StringUtils.isEmpty(userID)) {
-			
+
 			json.put("status", 200);
 			OrderComment orderComment = new OrderComment();
-			
+
 			orderComment.setUserName(username);
 			orderComment.setOrderID(orderID);
 			orderComment.setCommnet(comment);
@@ -65,10 +67,10 @@ public class OrderCommentController {
 			orderComment.setUserID(Integer.parseInt(userID));
 			Date date = new Date();
 			orderComment.setCommentTime(date);
-			//保存订单的评论
+			// 保存订单的评论
 			orderCommentService.saveOrderComment(orderComment);
-			
-			//更新订单的评论状态
+
+			// 更新订单的评论状态
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("orderID", orderID);
 			map.put("status", "1");
@@ -78,43 +80,45 @@ public class OrderCommentController {
 
 			json.put("status", -1);
 		}
-		
+
 		return json.toString();
 	}
-	
+
 	/**
 	 * 根据用户id查询出用户评论过的订单
+	 * 
 	 * @param userID
 	 * @return
 	 */
-	@RequestMapping(value="/findcommentorder", method=RequestMethod.POST, produces="text/html;charset=UTF-8")
+	@RequestMapping(value = "/findcommentorder", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	public String findCommentOrder(
-			@RequestParam(value = "userID") String userID){
-		
+	public String findCommentOrder(@RequestParam(value = "userID") String userID) {
+
 		JSONObject json = new JSONObject();
-		
+
 		if (!StringUtils.isEmpty(userID)) {
-			
+
 			json.put("status", 200);
-			List<OrderComment> list = orderCommentService.findCommentOrder(Integer.parseInt(userID));
+			List<OrderComment> list = orderCommentService
+					.findCommentOrder(Integer.parseInt(userID));
 			JSONArray array = new JSONArray();
-			
+
 			for (OrderComment orderComment : list) {
 				JSONObject temp = new JSONObject();
 				temp.put("comment", orderComment.getCommnet());
 				temp.put("score", orderComment.getScore());
 				Date time = orderComment.getCommentTime();
-				temp.put("commentTime", DateUtils.format(time, "yyyy-MM-dd HH:MM:SS"));
+				temp.put("commentTime",
+						DateUtils.format(time, "yyyy-MM-dd HH:MM:SS"));
 				array.add(temp);
 			}
-			
+
 			json.put("orderDetail", array);
 		} else {
-			
+
 			json.put("status", -1);
 		}
-		
+
 		return json.toString();
 	}
 }

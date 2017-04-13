@@ -447,3 +447,19 @@ html, body {
 .order-info {
 	padding-left: 20px;
 }
+
+/**
+	预定模态框样式
+*/
+.pre-order-right {
+	width: 50%;
+	float: right;
+}
+.pre-order-left {
+	width: 50%;
+	float: left;
+	padding-right: 10px;
+}
+.modal-footer {
+	clear: both;
+}

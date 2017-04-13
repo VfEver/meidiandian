@@ -41,7 +41,7 @@
 					
 				</table>
 				</div>
-				<button ng-click="updateUserInfo()" class="btn btn-default">更新信息</button> 
+				<button ng-click="updateUserInfo()" class="btn btn-default">更新信息</button>
 			</div>
 			
 			<!-- 个人订单详情页 -->
@@ -167,10 +167,26 @@
 							<td><p>营业时间：</td><td><input ng-model="storeHours" type="text" class="form-control" placeholder="格式：0-24"/></p></td>
 						</tr>
 						<tr>
-							<td><p>起送金额：</td>
+							<td><p>配送费：</td>
 							<td>
 							<div class="input-group">
 								<span class="input-group-addon">￥</span><input ng-model="cost" type="text" class="form-control" placeholder="例如：3"/></p>
+							</div>
+							</td>
+						</tr>
+						<tr>
+							<td><p>起送金额：</td>
+							<td>
+							<div class="input-group">
+								<span class="input-group-addon">￥</span><input ng-model="beginPost" type="text" class="form-control" placeholder="例如：10"/></p>
+							</div>
+							</td>
+						</tr>
+						<tr>
+							<td><p>送达时间：</td>
+							<td>
+							<div class="input-group">
+								<input ng-model="postTime" type="text" class="form-control" placeholder="例如：30"/><span class="input-group-addon">min</span></p>
 							</div>
 							</td>
 						</tr>
@@ -204,8 +220,32 @@
 							<td><input ng-model="storeHours" type="text" class="form-control" placeholder="格式：0-24"/></td>
 						</tr>
 						<tr>
-							<td><p>起送金额：</td><td>{{cost}}</p></td>
-							<td><input ng-model="cost" type="text" class="form-control" placeholder="例如：3"/></td>
+							<td><p>配送费：</td><td>{{cost}}</p></td>
+							<td>
+							<div class="input-group">
+								<span class="input-group-addon">￥</span><input ng-model="cost" type="text" class="form-control" placeholder="例如：3"/>
+							</div>
+							</td>
+						</tr>
+						<tr>
+							<td><p>起送金额：</td><td>{{beginPost}}</p></td>
+							<td>
+							<div class="input-group">
+								<span class="input-group-addon">￥</span><input ng-model="beginPost" type="text" class="form-control" placeholder="例如：3"/>
+							</div>
+							</td>
+						</tr>
+						<tr>
+							<td><p>送达时间：</td><td>{{postTime}}</p></td>
+							<td>
+							<div class="input-group">
+								<input ng-model="postTime" type="text" class="form-control" placeholder="例如：3"/><span class="input-group-addon">min</span>
+							</div>
+							</td>
+						</tr>
+						<tr>
+							<td><p>注意事项：</td><td>{{storeNotice}}</p></td>
+							<td><input ng-model="storeNotice" type="text" class="form-control" /></td>
 						</tr>
 						<tr>
 							<td><p>店铺图片：</p></td>

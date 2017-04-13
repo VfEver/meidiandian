@@ -53,7 +53,45 @@ angular.module('controllers', ['ngCookies'])
 	}
 	
 }])
-.controller('storeController', ['$scope', '$location', '$cookies', '$cookieStore', function($scope, $location, $cookies, $cookieStore) {
+.controller('storeController', ['$scope', '$location', '$cookies', '$cookieStore', '$http', '$window', function($scope, $location, $cookies, $cookieStore, $http, $window) {
+	
+	//刷新页面
+	$scope.reloadRoute = function () {
+	    $window.location.reload();
+	};
+	
+	//店家入驻
+	$scope.joinIn = function () {
+		if ($cookies.get("id") === undefined) {
+			
+			alert("请先登录！");
+			$location.path("login");
+			return ;
+		} else {
+			
+			$.ajax({
+				url: '/meidiandian/user/isseller.do',
+				data: {
+					id: $cookies.get("id")
+				},
+				type: 'GET',
+			})
+			.then(function(data) {
+				var res = JSON.parse(data);
+				
+				if (res.status == 200) {
+					if (res.isSeller === 0) {
+						alert("您不是商家，请注册商家账号!");
+					} else {
+						$location.path("settings");
+					}
+				} else {
+					alert("出现问题，请重试！");
+				}
+			})
+		}
+		
+	}
 	
 	//点击搜索按钮响应跳转和查询
 	$scope.searchStore = function () {
@@ -67,8 +105,11 @@ angular.module('controllers', ['ngCookies'])
 		$location.path("store");
 	}
 	
-	searchStores();
-	recommendGoods();
+	
+	if ($location.url().indexOf("store") >= 0 || $location.url().indexOf("goods") >= 0) {
+		searchStores();
+		recommendGoods();
+	}
 
 	//导航搜索
 	$scope.navSearch = function () {
@@ -76,24 +117,9 @@ angular.module('controllers', ['ngCookies'])
 			alert("请输入城市名称");
 			return ;
 		}
-		$.ajax({
-			url: '/meidiandian/store/findstore.do',
-			data: {
-				city: $scope.navCity.trim()
-			},
-			type: 'GET',
-		})
-		.then(function(data) {
-			var res = JSON.parse(data);
-			
-			if (res.status == 200) {
-				$scope.$apply(function () {
-					$scope.storeList = res.storeList;
-				});
-			} else {
-				alert("出现问题，请重试！");
-			}
-		})
+		$cookies.put("city", $scope.navCity);
+		$location.path("store");
+		$scope.reloadRoute();
 	}
 	
 	//查询相应城市的商铺
@@ -374,6 +400,14 @@ angular.module('controllers', ['ngCookies'])
 	
 	//点击添加按钮实现将商品添加至购物车
 	$scope.addGoodsToCart = function (i, img) {
+		
+		//判断用户是否登录，没有则进入登录界面
+		if ($cookies.get("id") === undefined) {
+			alert("请先登录！");
+			$location.path("login");
+			return ;
+		}
+		
 		$scope.tableShow = true;
 		$scope.cartInfoShow = true;
 		
@@ -393,11 +427,12 @@ angular.module('controllers', ['ngCookies'])
 		
 		$scope.totalPrice += Number($scope.goodsList[i].price);
 		
-//		//实现飞入效果
+		//实现飞入效果
 //		    var offset = $(".cart").offset(); 
 //		    $(".add-cart").click(function(event){ 
 //		        var addcar = $(this); 
 //		        var flyer = $('<img class="u-flyer" src="'+img+'">'); 
+//				console.log("btin");
 //		        flyer.fly({ 
 //		            start: { 
 //		                left: event.pageX, //开始位置（必填）#fly元素会被设置成position: fixed 
@@ -410,9 +445,37 @@ angular.module('controllers', ['ngCookies'])
 //		                height: 0 //结束时高度 
 //		            }, 
 //		            onEnd: function(){ //结束回调
+//						console.log(event.pageX);
+//						console.log(offset.left);
 //		            } 
 //		        }); 
 //		    }); 
+		
+		var offset = $('.cart').offset();
+		$('.add-cart').each(function(index, item) {
+	         $(item).on('click', function(event) {
+				var addcar = $(this); 
+				var flyer = $('<img class="u-flyer" src="goodsImgs/1.jpg" />');
+//				console.log(flyer);
+		        flyer.fly({ 
+		            start: { 
+		                left: event.pageX, //开始位置（必填）#fly元素会被设置成position: fixed 
+		                top: event.pageY //开始位置（必填） 
+		            }, 
+		            end: { 
+		                left: offset.left, //结束位置（必填） 
+		                top: offset.top, //结束位置（必填） 
+		                width: 0, //结束时宽度 
+		                height: 0 //结束时高度 
+		            }, 
+		            onEnd: function(){ //结束回调
+		            } 
+		        }); 
+//		 		$('#fly').play(); //autoPlay: false后，手动调用运动
+//		  		$('#fly').destroy(); //移除dom
+
+			});
+		});
 	}
 	
 	//点击减号删除商品
@@ -444,6 +507,7 @@ angular.module('controllers', ['ngCookies'])
 		if ($cookies.get("id") == null || $cookies.get("id") == undefined) {
 			alert("请登录...");
 			$location.path("login");
+			
 		} else {
 			
 			$.ajax({
@@ -468,6 +532,25 @@ angular.module('controllers', ['ngCookies'])
 	//结账
 	$scope.payNow = function () {
 		
+		//判断用户是否在购买自己的商品
+		$.ajax({ 
+			url: '/meidiandian/store/buyself.do',
+			data: {
+				id: $cookies.get("id"),
+				storeID: $cookies.get("storeID")
+			},
+			type: 'GET',
+		})
+		.then(function(data) {
+			var res = JSON.parse(data);
+			if(res.status === 200) {
+				if (res.can === 0) {
+					alert("不能在自己的店铺购买商品");
+					$location.path("store");
+				}
+			}
+		});
+		
 		var obj = "";
 		for (var index in $scope.cartGoods) {
 			if (obj != "") {
@@ -478,7 +561,7 @@ angular.module('controllers', ['ngCookies'])
 		}
 		
 		//增加商品出售数量
-		$.ajax({
+		$.ajax({ 
 			url: '/meidiandian/goods/addnum.do',
 			data: {
 				goodsData: obj
@@ -531,7 +614,7 @@ angular.module('controllers', ['ngCookies'])
 			j = 0;
 			$scope.$apply();
 			
-			
+			//保存订单的详细信息
 			$.ajax({
 				url: '/meidiandian/order/saveorderdetail.do',
 				data: {
@@ -546,6 +629,98 @@ angular.module('controllers', ['ngCookies'])
 					alert("支付失败");
 				}
 			});
+		});
+	}
+	
+	//点击预定弹出模态框，选择座位、订餐以及时间
+	$scope.preOrder = function () {
+		$("#preOrderModal").modal("toggle");
+	}
+	
+	//点击立即预定
+	$scope.preOrderBtn = function () {
+		
+		var date = new Date($scope.beginTime);
+		var beginTime = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate() 
+						+ " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+		
+		//将预定订单信息存入数据库
+		$.ajax({
+			url: '/meidiandian/preorder/savepreorderdetail.do',
+			data: {
+				userID: $cookies.get("id"),
+				username: $cookies.get("username"),
+				storeID: $cookies.get("storeID"),
+				beginTime: beginTime,
+				number: $scope.preOrderNumber,
+				totalCost: $scope.totalPrice-$scope.store.cost
+			},
+			type: 'POST',
+		})
+		.then(function(data) {
+			var res = JSON.parse(data);
+			if (res.status === 200) {
+				var goodsData = "";
+				for (var index in $scope.cartGoods) {
+					if (goodsData != "") {
+						goodsData += ";";
+					}
+					var temp = $scope.cartGoods[index].goodsID + "," +  $scope.cartGoods[index].name+ "," + $scope.cartGoods[index].number;
+					goodsData += temp;
+				}
+				
+				//初始化购物车所有条件
+				$scope.tableShow = false;
+				$scope.cartInfoShow = false;
+				$scope.cartGoods = [];
+				$scope.totalPrice = $scope.store.cost;
+				$scope.cartGoodsNumber = 0;
+				goodsIndex = [];
+				j = 0;
+				$scope.$apply();
+				
+				//保存订单的详细信息
+				$.ajax({
+					url: '/meidiandian/preorder/savegoodsdetail.do',
+					data: {
+						orderID: res.curID,
+						goodsData: goodsData
+					},
+					type: 'POST',
+				})
+				.then(function(data) {
+					var res = JSON.parse(data);
+					if(res.status != 200) {
+						alert("预定失败");
+					}
+				});
+			} else {
+				alert("预定失败");
+			}
+		});
+		
+		var obj = "";
+		for (var index in $scope.cartGoods) {
+			if (obj != "") {
+				obj += ";";
+			}
+			var temp = $scope.cartGoods[index].goodsID+","+$scope.cartGoods[index].number;
+			obj += temp;
+		}
+		
+		//增加商品出售数量
+		$.ajax({ 
+			url: '/meidiandian/goods/addnum.do',
+			data: {
+				goodsData: obj
+			},
+			type: 'POST',
+		})
+		.then(function(data) {
+			var res = JSON.parse(data);
+			if(res.status != 200) {
+				alert("付款失败!请重试");
+			}
 		});
 	}
 	
@@ -606,6 +781,9 @@ angular.module('controllers', ['ngCookies'])
 					$scope.storeHours = res.storeHours;
 					$scope.storeAddress = res.storeAddress;
 					$scope.cost = res.cost;
+					$scope.postTime = res.postTime;
+					$scope.beginPost = res.beginPost;
+					$scope.storeNotice = res.storeNotice;
 					$scope.storeImg = res.storeImage;
 					$cookies.put("storeID", res.storeID);
 					
@@ -782,6 +960,8 @@ angular.module('controllers', ['ngCookies'])
 				storeAddress: $scope.storeAddress,
 				storeHours: $scope.storeHours,
 				cost: $scope.cost,
+				beginPost: $scope.beginPost,
+				postTime: $scope.postTime,
 				id: $cookies.get("id")
 			},
 			type: 'POST',
@@ -806,6 +986,9 @@ angular.module('controllers', ['ngCookies'])
 				storeAddress: $scope.storeAddress,
 				storeHours: $scope.storeHours,
 				cost: $scope.cost,
+				beginPost: $scope.beginPost,
+				postTime: $scope.postTime,
+				storeNotice: $scope.storeNotice,
 				userID: $cookies.get("id"),
 				id: $cookies.get("storeID")
 			},
@@ -1197,22 +1380,4 @@ angular.module('controllers', ['ngCookies'])
 	}
 	
 }]);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

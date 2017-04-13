@@ -59,4 +59,5 @@
 		from user
 		where user_account=#{account}
 	</select>
+	
 </mapper>

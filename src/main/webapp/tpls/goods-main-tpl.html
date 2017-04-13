@@ -4,11 +4,11 @@
 	
 		<div class="right-bar">
 			<div class="post-time">
-				<strong style="font-size: 30px">30</strong>分钟
+				<strong style="font-size: 30px">{{store.postTime}}</strong>分钟
 				<p>平均送餐时间</p>
 			</div>
 			<div class="begin-cost">
-				<strong style="font-size: 30px">10</strong>元
+				<strong style="font-size: 30px">{{store.beginPost}}</strong>元
 				<p>起送</p>
 			</div>
 			<div class="post-cost">
@@ -32,13 +32,96 @@
 	<div class="page-slice"></div>
 	<div class="goods-detail">
 		<div class="store-notice">
-			<div style="background-color: #F5F5F5; font-size: 15px;">订餐必知&商家公示</div>
-			<div style="font-size: 12px; margin-top: 10px;">本店每天退出特价菜，请及时抢购</div>
+			<div style="background-color: #F5F5F5; font-size: 15px;">订餐需知&商家公示</div>
+			<div style="font-size: 12px; margin-top: 10px;">{{store.storeNotice}}</div>
+			<div style="margin: 10px 0 0 20px">
+				<p><button id="fat-btn" class="btn btn-primary" ng-click = "preOrder()">我要预定</button></p>
+			</div>
+			
+			
+			<div class="modal" id="preOrderModal">
+			    <div class="modal-dialog">
+			        <div class="modal-content">
+			            <div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+							<h4 class="modal-title">预定信息</h4>
+						</div>
+						<div class="modal-body">
+						
+							<div class="pre-order-right">
+								<table class="table table-striped">
+									<thead>
+										<tr>
+											<th>菜品</th><th>数量</th><th>价格</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="goods in cartGoods track by $index">
+											<td>{{goods.name}}</td>
+											<td>
+												<span ng-click="minusNumber($index)" class="glyphicon glyphicon-minus-sign" style="color: rgb(122, 121, 114); text-shadow: none"></span>
+												<span>{{goods.number}}</span>
+												<span ng-click="addNumber($index)" class="glyphicon glyphicon-plus" style="color: rgb(122, 121, 114); text-shadow: none"></span>
+											</td>
+											<td>{{goods.price * goods.number}}</td>
+										</tr>
+									</tbody>
+								</table>
+								
+								<div>
+									<table class="table">
+										<tr>
+											<td>预定时间：</td><td><input ng-model="beginTime" type="datetime-local"/></td>
+										</tr>
+										<tr>
+											<td>预定座位：</td><td><input ng-model="preOrderNumber" type="number"/></td>
+										</tr>
+									</table>
+								</div>
+								
+								<div class="cart-info" ng-show="cartInfoShow">
+									<div class="cart-info-inner">
+										共<span style="color: #fe4d3d;">{{cartGoodsNumber}}</span>份,
+										总计<span style="color: #fe4d3d;font-size: 28px;font-weight: 700;">{{totalPrice-store.cost}}</span>元
+									</div>
+								</div>
+								
+							</div>
+							
+							<div class="pre-order-left">
+								<table class="table table-striped">
+									<thead>
+										<tr>
+											<th>菜品</th><th>单价</th><th>操作</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat = "goods in goodsList">
+											<td>{{goods.name}}</td>
+											<td>{{goods.price}}</td>
+											<td>
+												<span ng-click="addGoodsToCart($index, goods.image)" class="glyphicon glyphicon-plus" style="color: gold; cursor: pointer; text-shadow: none"></span>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">取消操作</button>
+							<button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="preOrderBtn()">立即预定</button>
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
+			
+			
 		</div>
 		<div class="store-left">
 			<div class="goods-header">
-				<span class="glyphicon glyphicon-chevron-left" style="color: black; cursor:pointer;" ng-click="back()"></span>
 				<span>商品详情</span>
+				
 			</div>
 			<ul class="food-ul">
 				
@@ -157,7 +240,7 @@
 		<div class="cart-cost">
 			<span class="glyphicon glyphicon-shopping-cart" style="color: rgb(235, 186, 96);font-size: 28px; padding-left: 10px;">
 			</span>
-			<button type="button" class="btn btn-success" style="float: right" ng-disabled="totalPrice < 300" ng-click="payForGoods()">去支付</button>
+			<button type="button" class="btn btn-success" style="float: right" ng-disabled="totalPrice < store.beginPost && (cartGoodsNumber == undefined || cartGoodsNumber <= 0)" ng-click="payForGoods()">去支付</button>
 		</div>
 	</div>
 	<div class="page-slice"></div>

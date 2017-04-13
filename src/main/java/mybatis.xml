@@ -9,5 +9,6 @@
 		<typeAlias type="com.meidiandian.entity.Goods" alias="goods"/>
 		<typeAlias type="com.meidiandian.entity.Order" alias="order"/>
 		<typeAlias type="com.meidiandian.entity.OrderComment" alias="orderComment"/>
+		<typeAlias type="com.meidiandian.entity.PreOrder" alias="preOrder"/>
 	</typeAliases>
 </configuration>

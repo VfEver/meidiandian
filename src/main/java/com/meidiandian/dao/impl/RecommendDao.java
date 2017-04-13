@@ -8,18 +8,20 @@ import org.apache.ibatis.session.SqlSessionFactory;
 
 import com.meidiandian.dao.IRecommendDao;
 
-public class RecommendDao implements IRecommendDao{
+public class RecommendDao implements IRecommendDao {
 
 	private SqlSessionFactory sqlSessionFactory;
+
 	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
 		this.sqlSessionFactory = sqlSessionFactory;
 	}
-	
+
 	@Override
 	public List<Map<String, String>> findItemUser() {
-		
+
 		SqlSession sqlSession = sqlSessionFactory.openSession();
-		List<Map<String, String>> relation = sqlSession.selectList("recommend.findItemUser");
+		List<Map<String, String>> relation = sqlSession
+				.selectList("recommend.findItemUser");
 		sqlSession.close();
 		return relation;
 	}

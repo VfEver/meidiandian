@@ -99,4 +99,11 @@
 	  <bean id="recommendServiceID" class="com.meidiandian.service.impl.RecommendService">
 	  	<property name="recommendDao" ref="recommendDaoID"></property>
 	  </bean>
+	  
+	  <bean id="preOrderDaoID" class="com.meidiandian.dao.impl.PreOrderDao">
+	  	<property name="sqlSessionFactory" ref="sqlSessionFactoryBeanID"></property>
+	  </bean>
+	  <bean id="preOrderServiceID" class="com.meidiandian.service.impl.PreOrderService">
+	  	<property name="preOrderDao" ref="preOrderDaoID"></property>
+	  </bean>
 </beans>

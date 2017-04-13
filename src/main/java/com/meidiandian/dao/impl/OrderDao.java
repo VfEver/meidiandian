@@ -12,13 +12,14 @@ import com.meidiandian.entity.Order;
 public class OrderDao implements IOrderDao {
 
 	private SqlSessionFactory sqlSessionFactory;
+
 	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
 		this.sqlSessionFactory = sqlSessionFactory;
 	}
-	
+
 	@Override
 	public void saveOrder(Order order) {
-		
+
 		SqlSession sqlSession = sqlSessionFactory.openSession();
 		sqlSession.insert(Order.class.getName() + ".saveOrder", order);
 		sqlSession.commit();
@@ -36,16 +37,17 @@ public class OrderDao implements IOrderDao {
 
 	@Override
 	public List<Map<String, String>> findOrderDetail(int storeID) {
-		
+
 		SqlSession sqlSession = sqlSessionFactory.openSession();
-		List<Map<String, String>> list = sqlSession.selectList(Order.class.getName() + ".findOrderDetail", storeID);
+		List<Map<String, String>> list = sqlSession.selectList(
+				Order.class.getName() + ".findOrderDetail", storeID);
 		sqlSession.close();
 		return list;
 	}
 
 	@Override
 	public void updateOrderStatus(Map<String, String> map) {
-		
+
 		SqlSession sqlSession = sqlSessionFactory.openSession();
 		sqlSession.update(Order.class.getName() + ".updateOrderStatus", map);
 		sqlSession.commit();
@@ -54,9 +56,10 @@ public class OrderDao implements IOrderDao {
 
 	@Override
 	public List<Map<String, String>> findUserOrder(int userID) {
-		
+
 		SqlSession sqlSession = sqlSessionFactory.openSession();
-		List<Map<String, String>> orderList = sqlSession.selectList(Order.class.getName() + ".findUserOrder", userID);
+		List<Map<String, String>> orderList = sqlSession.selectList(
+				Order.class.getName() + ".findUserOrder", userID);
 		sqlSession.close();
 		return orderList;
 	}

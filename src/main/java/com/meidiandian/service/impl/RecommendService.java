@@ -9,13 +9,14 @@ import com.meidiandian.service.IRecommendService;
 public class RecommendService implements IRecommendService {
 
 	private IRecommendDao recommendDao;
+
 	public void setRecommendDao(IRecommendDao recommendDao) {
 		this.recommendDao = recommendDao;
 	}
-	
+
 	@Override
 	public List<Map<String, String>> findItemUser() {
-		
+
 		return recommendDao.findItemUser();
 	}
 

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+	<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.meidiandian.entity.PreOrder">
+	<resultMap type="preOrder" id="preOrderMap">
+		<id property="preOrderID" column="pre_order_id"/>
+		<result property="userID" column="user_id"/>
+		<result property="storeID" column="store_id"/>
+		<result property="username" column="user_name"/>
+		<result property="preOrderTime" column="pre_order_time"/>
+		<result property="manageStatus" column="manage_status"/>
+		<result property="beginTime" column="begin_time"/>
+		<result property="endTime" column="end_time"/>
+		<result property="needSeats" column="need_seats"/>
+		<result property="preCost" column="pre_cost"/>
+	</resultMap>
+	
+	<!-- 保存新的预订订单 -->
+	<insert id="savePreOrder" parameterType="preOrder">
+		insert into pre_order(user_id, store_id, user_name, pre_order_time, manage_status, begin_time, end_time, need_seats, pre_cost)
+		values(#{userID}, #{storeID}, #{username}, #{preOrderTime}, #{manageStatus}, #{beginTime}, #{endTime}, #{needSeats}, #{preCost});
+	</insert>
+	
+	<!-- 查询当前表中最大的ID -->
+	<select id="findMaxID" resultType="int">
+		select max(pre_order_id)
+		from pre_order;
+	</select>
+	
+	<!-- 保存预订订单的详细信息 -->
+	<insert id="savePreOrderDetail" parameterType="map">
+		insert into pre_order_list(pre_order_id, goods_id, goods_number, goods_name)
+		values (#{preOrderID}, #{goodsID}, #{goodsNumber}, #{goodsName});
+	</insert>
+</mapper>

@@ -7,16 +7,17 @@ import com.meidiandian.dao.IGoodsDao;
 import com.meidiandian.entity.Goods;
 import com.meidiandian.service.IGoodsService;
 
-public class GoodsService implements IGoodsService{
-	
+public class GoodsService implements IGoodsService {
+
 	private IGoodsDao goodsDao;
+
 	public void setGoodsDao(IGoodsDao goodsDao) {
 		this.goodsDao = goodsDao;
 	}
 
 	@Override
 	public List<Goods> findGoodsByStoreID(int storeID) {
-		
+
 		return goodsDao.findGoodsByStoreID(storeID);
 	}
 
@@ -28,7 +29,7 @@ public class GoodsService implements IGoodsService{
 
 	@Override
 	public void updateGoodsByID(Map<String, String> map) {
-		
+
 		goodsDao.updateGoodsByID(map);
 	}
 
