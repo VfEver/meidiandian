@@ -832,6 +832,7 @@ angular.module('controllers', ['ngCookies'])
 		$scope.orderPageShow = false;
 		$scope.personalOrderPageShow = false;
 		$scope.commentOrderShow = false;
+		$scope.preOrderShowPage = false;
 	}
 	
 	//点击进入用户自己订单信息页面
@@ -846,6 +847,8 @@ angular.module('controllers', ['ngCookies'])
 		$scope.orderPageShow = false;
 		$scope.personalOrderPageShow = true;
 		$scope.commentOrderShow = false;
+		$scope.preOrderShowPage = false;
+		
 		getPersonOrder();
 	}
 	
@@ -860,6 +863,7 @@ angular.module('controllers', ['ngCookies'])
 		$scope.orderPageShow = false;
 		$scope.personalOrderPageShow = false;
 		$scope.commentOrderShow = true;
+		$scope.preOrderShowPage = false;
 		
 		getCommentOrder();
 	}
@@ -877,6 +881,7 @@ angular.module('controllers', ['ngCookies'])
 		$scope.orderPageShow = false;
 		$scope.personalOrderPageShow = false;
 		$scope.commentOrderShow = false;
+		$scope.preOrderShowPage = false;
 		
 		getStoreInfo();
 	}
@@ -892,8 +897,25 @@ angular.module('controllers', ['ngCookies'])
 		$scope.storeInfo = false;
 		$scope.orderPageShow = true;
 		$scope.personalOrderPageShow = false;
+		$scope.preOrderShowPage = false;
 		
 		getOrderDetail();
+	}
+	
+	//点击进入预定订单
+	$scope.changeToPreOrderInfo = function () {
+		
+		$("li").removeClass("active");
+		$("#preOrderInfoID").addClass("active");
+		
+		$scope.userInfoDiv = false;
+		$scope.storeInfoDiv = false;
+		$scope.storeInfo = false;
+		$scope.orderPageShow = false;
+		$scope.personalOrderPageShow = false;
+		$scope.preOrderShowPage = true;
+		
+		findPreOrderDetail();
 	}
 	
 	//查询出个人已经评价过的订单
@@ -1159,6 +1181,22 @@ angular.module('controllers', ['ngCookies'])
 		});
 	}
 	
+	//查询此店铺预定订单信息
+	function findPreOrderDetail () {
+		$.ajax({
+			url: '/meidiandian/preorder/findpreorderdetail.do',
+			data: {
+				storeID: $cookies.get("storeID"),
+			},
+			type: 'POST',
+		})
+		.then(function(data) {
+			var res = JSON.parse(data);
+			console.log(res);
+			$scope.orderDetail = res.orderDetail;
+			slicePage();
+		});
+	}
 	
 	$('#goodsImg').on('change', function() {
 		var files = this.files[0];
@@ -1296,6 +1334,14 @@ angular.module('controllers', ['ngCookies'])
 	$scope.checkOrderDetail = function (index, orderID) {
 		
 		$("#orderModal").modal("toggle");
+		$scope.orderList = $scope.orderDetail[index].orderList;
+		$scope.curOrderID = orderID;
+	}
+	
+	//点击查看预定订单的详细信息
+	$scope.checkPreOrderDetail = function (index, orderID) {
+		
+		$("#preOrderModal").modal("toggle");
 		$scope.orderList = $scope.orderDetail[index].orderList;
 		$scope.curOrderID = orderID;
 	}

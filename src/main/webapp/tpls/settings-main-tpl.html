@@ -8,6 +8,7 @@
 			  <li ng-show="type == 0" ng-click="changeToUserComment()" id="usercommentID"><a href=""><h4>我的评价</h4></a></li>
 			  <li ng-show="type == 1" ng-click="changeToStoreInfo()" id="stroeInfoID"><a href=""><h4>店铺管理</h4></a></li>
 			  <li ng-show="type == 1" ng-click="changeToOrderInfo()" id="orderInfoID"><a href=""><h4>订单管理</h4></a></li>
+			  <li ng-show="type == 1" ng-click="changeToPreOrderInfo()" id="preOrderInfoID"><a href=""><h4>预订订单</h4></a></li>
 			</ul>
 		</div>
 		<div class="right-side">
@@ -411,9 +412,74 @@
 							<button type="button" class="btn btn-primary" ng-click="postGoods()" data-dismiss="modal">发货</button>
 						</div>
 					</div><!-- /.modal-content -->
-				</div><!-- /.modal-dialog -->
-			</div><!-- /.modal -->
+					</div><!-- /.modal-dialog -->
+				</div><!-- /.modal -->
 				
+			</div>
+			
+			<!-- 预定订单详情页面 -->
+			<div class="pre-order-page" ng-show="preOrderShowPage">
+				<ul class="order-ul">
+					<li class="order-li" ng-repeat = "order in items" ng-click = "checkPreOrderDetail($index, order.orderID)">
+						<div style="float:right">
+							<div>开始时间：{{order.beginTime}}</div>
+							<div>座位数量：{{order.needSeats}}</div>
+						</div>
+						<div class="order-info">
+							<div>订单时间:{{order.orderTime}}</div>
+							<div>订单人:{{order.username}}</div>
+						</div>
+					</li>
+				</ul>
+				
+				<nav>
+					<ul class="pagination">
+						<li>
+						<a ng-click="Previous()">
+						<span>上一页</span>
+						</a>
+						</li>
+						<li ng-repeat="page in pageList" ng-class="{active: isActivePage(page)}" >
+						<a ng-click="selectPage(page)" >{{ page }}</a>
+						</li>
+						<li>
+						<a ng-click="Next()">
+						<span>下一页</span>
+						</a>
+						</li>
+					</ul>
+				</nav>
+				
+				
+				<div class="modal" id="preOrderModal">
+			    <div class="modal-dialog">
+			        <div class="modal-content">
+			            <div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+							<h4 class="modal-title">订单详情</h4>
+						</div>
+						<div class="modal-body">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th>商品名称</th><th>数量</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat = "goods in orderList">
+										<td>{{goods.goodsName}}</td>
+										<td>{{goods.goodsNumber}}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+							<button type="button" class="btn btn-primary" ng-click="postGoods()" data-dismiss="modal">发货</button>
+						</div>
+					</div><!-- /.modal-content -->
+					</div><!-- /.modal-dialog -->
+				</div><!-- /.modal -->
 			</div>
 			
 		</div>

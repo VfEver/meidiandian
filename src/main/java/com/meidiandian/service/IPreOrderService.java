@@ -1,5 +1,7 @@
 package com.meidiandian.service;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.meidiandian.entity.PreOrder;
@@ -23,4 +25,11 @@ public interface IPreOrderService {
 	 * @param map
 	 */
 	public void savePreOrderDetail(Map<String, String> map);
+	
+	/**
+	 * 查询预定订单的详细信息
+	 * @param preOrderID
+	 * @return
+	 */
+	public List<HashMap<String, String>> findPreOrderDetail(int preOrderID);
 }

@@ -1,5 +1,7 @@
 package com.meidiandian.service.impl;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.meidiandian.dao.IPreOrderDao;
@@ -29,6 +31,12 @@ public class PreOrderService implements IPreOrderService {
 	public void savePreOrderDetail(Map<String, String> map) {
 
 		preOrderDao.savePreOrderDetail(map);
+	}
+
+	@Override
+	public List<HashMap<String, String>> findPreOrderDetail(int preOrderID) {
+
+		return preOrderDao.findPreOrderDetail(preOrderID);
 	}
 
 }

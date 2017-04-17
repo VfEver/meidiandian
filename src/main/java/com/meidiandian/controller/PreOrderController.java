@@ -3,8 +3,10 @@ package com.meidiandian.controller;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,7 +111,97 @@ public class PreOrderController {
 				map.put("goodsID", string.split(",")[0]);
 				map.put("goodsName", string.split(",")[1]);
 				map.put("goodsNumber", string.split(",")[2]);
+				preOrderService.savePreOrderDetail(map);
 			}
+		} else {
+			json.put("status", -1);
+		}
+		
+		return json.toString();
+	}
+	
+	/**
+	 * 查询出预订订单的详细信息
+	 * @param preOrderID
+	 * @return
+	 */
+	@RequestMapping(value = "/findpreorderdetail", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	@ResponseBody
+	public String findPreOrderDetail(
+			@RequestParam(value = "storeID") String storeID) {
+		
+		JSONObject json = new JSONObject();
+		
+		if (!StringUtils.isEmpty(storeID)) {
+			
+			json.put("status", 200);
+			
+			List<HashMap<String, String>> detail = 
+					preOrderService.findPreOrderDetail(Integer.parseInt(storeID));
+			
+			JSONArray array = new JSONArray();
+			JSONObject temp = null;
+
+			Map<String, JSONArray> orderMap = new HashMap<>();
+
+			for (Map<String, String> map : detail) {
+
+				String orderID = map.get("orderID");
+				if (orderMap.containsKey(orderID)) { // 如果orderMap里面存在此订单
+					JSONArray arr = orderMap.get(orderID);
+					JSONObject j = new JSONObject();
+					j.put("goodsName", map.get("goodsName"));
+					j.put("goodsNumber", map.get("goodsNumber"));
+					j.put("username", map.get("username"));
+
+					String time = String.valueOf(map.get("preOrderTime"));
+					j.put("orderTime", time);
+					String beginTime = String.valueOf(map.get("beginTime"));
+					String endTime = String.valueOf(map.get("endTime"));
+					j.put("beginTime", beginTime);
+					j.put("endTime", endTime);
+					j.put("needSeats", map.get("needSeats"));
+					
+					arr.add(j);
+				} else { // 如果不存在里面
+					JSONArray arr = new JSONArray();
+					JSONObject j = new JSONObject();
+					j.put("goodsName", map.get("goodsName"));
+					j.put("goodsNumber", map.get("goodsNumber"));
+					j.put("username", map.get("username"));
+
+					String time = String.valueOf(map.get("preOrderTime"));
+					j.put("orderTime", time);
+					String beginTime = String.valueOf(map.get("beginTime"));
+					String endTime = String.valueOf(map.get("endTime"));
+					j.put("beginTime", beginTime);
+					j.put("endTime", endTime);
+					j.put("needSeats", map.get("needSeats"));
+					
+					arr.add(j);
+					
+					orderMap.put(orderID, arr);
+				}
+
+			}
+			
+			for (Map.Entry<String, JSONArray> entry : orderMap.entrySet()) {
+				temp = new JSONObject();
+				temp.put("orderID", entry.getKey());
+				temp.put("username",
+						((JSONObject) entry.getValue().get(0)).get("username"));
+				temp.put("orderTime",
+						((JSONObject) entry.getValue().get(0)).get("orderTime"));
+				temp.put("orderList", entry.getValue());
+				temp.put("needSeats",
+						((JSONObject) entry.getValue().get(0)).get("needSeats"));
+				temp.put("beginTime",
+						((JSONObject) entry.getValue().get(0)).get("beginTime"));
+				
+				array.add(temp);
+			}
+			json.put("orderDetail", array);
+			
 		} else {
 			json.put("status", -1);
 		}

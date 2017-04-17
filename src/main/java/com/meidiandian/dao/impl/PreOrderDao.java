@@ -1,5 +1,7 @@
 package com.meidiandian.dao.impl;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -40,6 +42,16 @@ public class PreOrderDao implements IPreOrderDao {
 		sqlSession.insert(PreOrder.class.getName() + ".savePreOrderDetail", map);
 		sqlSession.commit();
 		sqlSession.close();
+	}
+
+	@Override
+	public List<HashMap<String, String>> findPreOrderDetail(int preOrderID) {
+
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		List<HashMap<String, String>> details = sqlSession.selectList(PreOrder.class.getName() + ".findPreOrderDetail", preOrderID);
+		sqlSession.close();
+		
+		return details;
 	}
 
 }

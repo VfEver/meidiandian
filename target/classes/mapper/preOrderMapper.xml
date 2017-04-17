@@ -32,4 +32,21 @@
 		insert into pre_order_list(pre_order_id, goods_id, goods_number, goods_name)
 		values (#{preOrderID}, #{goodsID}, #{goodsNumber}, #{goodsName});
 	</insert>
+	
+	<!-- 查询预定订单的详细信息 -->
+	<select id="findPreOrderDetail" parameterType="int" resultType="java.util.HashMap">
+		select p.user_id as userID,
+				p.user_name as username,
+				p.pre_order_time as preOrderTime,
+				p.begin_time as beginTime,
+				p.end_time as endTime,
+				p.need_seats as needSeats,
+				p.pre_cost as preCost,
+				l.goods_id as goodsID,
+				l.goods_number as goodsNumber,
+				l.goods_name as goodsName
+		from pre_order p right join pre_order_list l
+		on p.pre_order_id = l.pre_order_id
+		where p.store_id = #{id}
+	</select>
 </mapper>
