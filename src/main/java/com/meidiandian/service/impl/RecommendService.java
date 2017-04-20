@@ -20,4 +20,16 @@ public class RecommendService implements IRecommendService {
 		return recommendDao.findItemUser();
 	}
 
+	@Override
+	public Map<String, String> findGoodsDetail(int goodsID) {
+
+		return recommendDao.findGoodsDetail(goodsID);
+	}
+
+	@Override
+	public Map<String, String> findTopGoods(int topID) {
+
+		return recommendDao.findTopGoods(topID);
+	}
+
 }

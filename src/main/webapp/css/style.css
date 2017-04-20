@@ -195,7 +195,7 @@ html, body {
 	margin: 0 5px;
 	padding-top: 10px;
 	position: relative;
-	min-height: 300px
+	min-height: 300px;
 }
 .rest-li {
 	width: 242px;
@@ -340,7 +340,7 @@ html, body {
 	width: 714px;
 	background-color: #fff;
 }
-.goods-header {
+.goods-header, .recommend-head {
 	height: 50px;
     font-size: 16px;
     padding-left: 19px;
@@ -462,4 +462,16 @@ html, body {
 }
 .modal-footer {
 	clear: both;
+}
+
+.recommend-list {
+	height: 320px;
+	background-color: #F5F5F5;
+}
+.goods-info-rec {
+	width: 245px;
+	height: 270px;
+    border-right: 1px dashed #DDD;
+    border-bottom: 1px dashed #DDD;
+    padding-right: 1px;
 }

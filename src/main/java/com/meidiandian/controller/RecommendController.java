@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -183,35 +184,72 @@ public class RecommendController {
 
 			// 存储商品对当前用户的推荐度
 			Map<String, Double> recommendRate = new HashMap<String, Double>();
-
-			// 针对user1的行为推荐商品
-			for (String itemID : user_item.get(user1)) {
-				if (!user_item.get(id).contains(itemID)) {
-					recommendRate.put(itemID,
-							relationRate.get(id + "," + user1));
-				}
-			}
-
-			// 针对user2的行为进行推荐
-			for (String itemID : user_item.get(user2)) {
-				if (!user_item.get(id).contains(itemID)) {
-					recommendRate.put(itemID,
-							relationRate.get(id + "," + user2));
-				}
-			}
-
-			// 找出推荐商品的id,找出M个商品,M=3
-			String[] arr = new String[3];
+			
+			// 找出推荐商品的id,找出M个商品,M=4
+			String[] arr = new String[4];
 			int index = 0;
-
-			for (Map.Entry<String, Double> entry : recommendRate.entrySet()) {
-				arr[index++] = entry.getKey();
-				if (index == 3) {
-					break;
+			
+			if (!StringUtils.isEmpty(user1) && !StringUtils.isEmpty(user2)) {
+				
+				// 针对user1的行为推荐商品
+				for (String itemID : user_item.get(user1)) {
+					if (!user_item.get(id).contains(itemID)) {
+						recommendRate.put(itemID,
+								relationRate.get(id + "," + user1));
+					}
+				}
+				
+				// 针对user2的行为进行推荐
+				for (String itemID : user_item.get(user2)) {
+					if (!user_item.get(id).contains(itemID)) {
+						recommendRate.put(itemID,
+								relationRate.get(id + "," + user2));
+					}
+				}
+				
+				for (Map.Entry<String, Double> entry : recommendRate.entrySet()) {
+					arr[index++] = entry.getKey();
+					if (index == 3) {
+						break;
+					}
 				}
 			}
+			
+			JSONArray array = new JSONArray();
+			JSONObject temp = null;
+			int j = 0;
 
-			json.put("itemsID", arr);
+			for (String goodsID : arr) {
+				
+				if (StringUtils.isEmpty(goodsID)) {
+
+					Map<String, String> goodsDetail = recommendService.findTopGoods(j);
+					temp = new JSONObject();
+					temp.put("goodsID", goodsDetail.get("goodsID"));
+					temp.put("goodsName", goodsDetail.get("goodsName"));
+					temp.put("goodsPrice", goodsDetail.get("goodsPrice"));
+					temp.put("goodsImage", goodsDetail.get("goodsImage"));
+					temp.put("soldNumber", goodsDetail.get("soldNumber"));
+					temp.put("storeID", goodsDetail.get("storeID"));
+					temp.put("storeName", goodsDetail.get("storeName"));
+					array.add(temp);
+					++j;
+				} else {
+					
+					Map<String, String> goodsDetail = recommendService.findGoodsDetail(Integer.parseInt(goodsID));
+					temp = new JSONObject();
+					temp.put("goodsID", goodsDetail.get("goodsID"));
+					temp.put("goodsName", goodsDetail.get("goodsName"));
+					temp.put("goodsPrice", goodsDetail.get("goodsPrice"));
+					temp.put("goodsImage", goodsDetail.get("goodsImage"));
+					temp.put("soldNumber", goodsDetail.get("soldNumber"));
+					temp.put("storeID", goodsDetail.get("storeID"));
+					temp.put("storeName", goodsDetail.get("storeName"));
+					array.add(temp);
+				}
+			}
+			
+			json.put("itemsList", array);
 
 		} else {
 

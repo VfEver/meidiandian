@@ -11,4 +11,18 @@ public interface IRecommendService {
 	 * @return
 	 */
 	public List<Map<String, String>> findItemUser();
+	
+	/**
+	 * 查询出该商品的详细信息
+	 * @param goodsID
+	 * @return
+	 */
+	public Map<String, String> findGoodsDetail(int goodsID);
+	
+	/**
+	 * 查询出销量第？高的商品的详细信息
+	 * @param topID
+	 * @return
+	 */
+	public Map<String, String> findTopGoods(int topID);
 }

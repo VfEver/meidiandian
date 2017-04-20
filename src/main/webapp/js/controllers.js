@@ -108,7 +108,9 @@ angular.module('controllers', ['ngCookies'])
 	
 	if ($location.url().indexOf("store") >= 0 || $location.url().indexOf("goods") >= 0) {
 		searchStores();
-		recommendGoods();
+		if ($cookies.get("id") != undefined && $cookies.get("id").length > 0) {
+			recommendGoods();
+		}
 	}
 
 	//导航搜索
@@ -158,6 +160,8 @@ angular.module('controllers', ['ngCookies'])
 			
 			if (res.status == 200) {
 				
+				$scope.goodsList = res.itemsList;
+				$scope.$apply();
 			} else {
 				
 			}
@@ -173,6 +177,11 @@ angular.module('controllers', ['ngCookies'])
 	//返回前一页
 	$scope.back = function () {
 		$location.path("index");
+	}
+	
+	//关闭推荐
+	$scope.closeRecommend = function () {
+		$scope.recommendPageShow = true;
 	}
 }])
 .controller('registerController', ['$scope', '$location', '$cookies', '$cookieStore', function($scope, $location, $cookies, $cookieStore) {
@@ -1192,7 +1201,6 @@ angular.module('controllers', ['ngCookies'])
 		})
 		.then(function(data) {
 			var res = JSON.parse(data);
-			console.log(res);
 			$scope.orderDetail = res.orderDetail;
 			slicePage();
 		});

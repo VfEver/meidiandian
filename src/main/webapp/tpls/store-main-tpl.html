@@ -27,7 +27,9 @@
 				</ul>
 			</div>
 		</div>
+		
 		<div class="page-slice"></div>
+		
 		<div class="rest-list">
 			<ul class="list">
 				<li class="rest-li" ng-repeat="store in storeList" ng-click="checkDetail(store.id)">
@@ -43,6 +45,40 @@
 					</div>
 				</li>
 			</ul>
+		</div>
+		
+		<div class="page-slice"></div>
+		
+		<div class="recommend-list" ng-hide="recommendPageShow">
+			
+			<div class="recommend-head">
+				<span ng-click="closeRecommend()" class="glyphicon glyphicon-remove" style="float: right; margin-right: 10px; cursor: pointer;" title="关闭推荐">
+				</span>
+				<span style="color:red;">猜你喜欢</span>
+			</div>
+			
+			<ul class="food-ul">
+				
+				<li class="foods-li" ng-repeat="goods in goodsList" ng-click="checkDetail(goods.storeID)" style="cursor: pointer;">
+					<div class="goods-info-rec">
+					<div class="goods-inner-wrap">
+						<div class="food-image">
+							<img ng-src="{{goods.goodsImage}}" />
+						</div>
+						<div><h4>{{goods.goodsName}}</h4></div>
+						<div class="food-number">已售{{goods.soldNumber}}份</div>
+						<div class="food-pos">
+							<div class="food-add">
+								<span class="glyphicon" style="color: gold;">点击进入店铺</span>
+							</div>
+							<div class="food-cost">￥{{goods.goodsPrice}}元</div>
+						</div>
+					</div>
+					</div>
+				</li>
+				
+			</ul>
+			
 		</div>
 	</div>
 </div>

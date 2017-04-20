@@ -26,4 +26,22 @@ public class RecommendDao implements IRecommendDao {
 		return relation;
 	}
 
+	@Override
+	public Map<String, String> findGoodsDetail(int goodsID) {
+
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		Map<String, String> goodsDetail = sqlSession.selectOne("recommend.findGoodsDetail", goodsID);
+		sqlSession.close();
+		return goodsDetail;
+	}
+
+	@Override
+	public Map<String, String> findTopGoods(int topID) {
+
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		Map<String, String> goodsDetail = sqlSession.selectOne("recommend.findTopGoods", topID);
+		sqlSession.close();
+		return goodsDetail;
+	}
+
 }

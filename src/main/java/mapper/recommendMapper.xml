@@ -19,4 +19,32 @@
 		on c.order_id = a.order_id
 	</select>
 	
+	<!-- 根据商品的ID查询商品的详细信息 -->
+	<select id="findGoodsDetail" parameterType="int" resultType="java.util.HashMap">
+		select g.goods_id as goodsID,
+			g.goods_name as goodsName,
+			g.goods_price as goodsPrice,
+			g.goods_image as goodsImage,
+			g.sold_number as soldNumber,
+			s.store_id as storeID,
+			s.store_name as storeName
+		from goods g right join store s
+		on g.store_id = s.store_id
+		where g.goods_id = #{id};
+	</select>
+	
+	<!-- 查询出销量第？高的商品信息 -->
+	<select id="findTopGoods" parameterType="int" resultType="java.util.HashMap">
+		select g.goods_id as goodsID,
+			g.goods_name as goodsName,
+			g.goods_price as goodsPrice,
+			g.goods_image as goodsImage,
+			g.sold_number as soldNumber,
+			s.store_id as storeID,
+			s.store_name as storeName
+		from goods g right join store s
+		on g.store_id = s.store_id
+		order by g.sold_number desc 
+		limit #{j},1;
+	</select>
 </mapper>
