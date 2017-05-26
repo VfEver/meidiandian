@@ -132,7 +132,7 @@ angular.module('controllers', ['ngCookies'])
 			data: {
 				city: $cookies.get("city")
 			},
-			type: 'GET',
+			type: 'POST',
 		})
 		.then(function(data) {
 			var res = JSON.parse(data);

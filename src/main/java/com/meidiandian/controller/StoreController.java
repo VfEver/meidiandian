@@ -302,7 +302,7 @@ public class StoreController {
 	 * @param city
 	 * @return
 	 */
-	@RequestMapping(value = "/findstore", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "/findstore", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ResponseBody
 	public String findStoreByCity(
 			@RequestParam(value = "city", defaultValue = "聊城") String city) {
